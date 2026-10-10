@@ -1,0 +1,11 @@
+<% const title = it.title || 'Dashboard' %>
+<% const icon = it.icon || 'fas fa-cog' %>
+
+<div class="bg-100 py-3">
+  <div class="container d-flex align-items-center gap-3">
+    <span class="ig-stat-icon" style="width:44px;height:44px;border-radius:12px;font-size:19px;display:inline-flex;align-items:center;justify-content:center;color:#fff;background:var(--ig-gradient);">
+      <i class="<%= icon %>"></i>
+    </span>
+    <h1 class="bd-title mb-0 ig-brand"><%= title %></h1>
+  </div>
+</div>

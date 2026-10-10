@@ -1,0 +1,105 @@
+<%~ includeFile("partials/header.eta", {
+        user: user
+}) %>
+<%~ includeFile("partials/message.eta") %>
+
+<div class="container my-4">
+        <section class="ig-hero text-center text-md-start">
+                <div class="row align-items-center g-4">
+                        <div class="col-md-8">
+                                <div class="d-flex align-items-center gap-3 justify-content-center justify-content-md-start mb-3">
+                                        <div class="ig-hero-logo"><i class="fa-brands fa-instagram"></i></div>
+                                        <span class="ig-badge"><i class="fa-solid fa-bolt"></i> Instagram edition</span>
+                                </div>
+                                <h1 class="mb-2">Goat Bot <span class="ig-brand">IG</span></h1>
+                                <p class="lead mb-4" style="max-width:640px;">
+                                        An Instagram Direct chat bot for a personal account &mdash; moderation,
+                                        custom commands, welcome/leave messages and levels, powered by the
+                                        <b>@lazyneoaz/ig-chat-api</b> client.
+                                </p>
+                                <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
+                                        <a href="/dashboard" class="btn btn-ig">
+                                                <i class="fas fa-cog me-1"></i> Open dashboard
+                                        </a>
+                                        <a href="/stats" class="btn btn-outline-light rounded-pill px-4">
+                                                <i class="fas fa-chart-bar me-1"></i> Bot stats
+                                        </a>
+                                </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                                <i class="fa-brands fa-instagram" style="font-size:130px;opacity:.18;"></i>
+                        </div>
+                </div>
+        </section>
+</div>
+
+<div class="container">
+        <div class="row g-4">
+                <div class="col-md-4">
+                        <div class="ig-card ig-card-hover p-4 h-100" onclick="window.location.href='/dashboard'" style="cursor:pointer;">
+                                <div class="ig-stat-icon mb-3"><i class="fas fa-sliders"></i></div>
+                                <h5 class="mb-2">Easy to use</h5>
+                                <p class="text-muted mb-0">
+                                        Customise welcome &amp; leave messages, per-thread settings and more from a
+                                        clean, intuitive dashboard.
+                                </p>
+                        </div>
+                </div>
+                <div class="col-md-4">
+                        <div class="ig-card ig-card-hover p-4 h-100" onclick="window.location.href='/dashboard'" style="cursor:pointer;">
+                                <div class="ig-stat-icon mb-3"><i class="fas fa-terminal"></i></div>
+                                <h5 class="mb-2">Custom commands</h5>
+                                <p class="text-muted mb-0">
+                                        Build your own commands with full control &mdash; the bot ships with dozens of
+                                        ready-to-use modules.
+                                </p>
+                        </div>
+                </div>
+                <div class="col-md-4">
+                        <div class="ig-card ig-card-hover p-4 h-100" onclick="window.location.href='/dashboard'" style="cursor:pointer;">
+                                <div class="ig-stat-icon mb-3"><i class="fas fa-ranking-star"></i></div>
+                                <h5 class="mb-2">Levels &amp; XP</h5>
+                                <p class="text-muted mb-0">
+                                        Reward your most active members with a built-in level and experience system.
+                                </p>
+                        </div>
+                </div>
+        </div>
+
+        <div class="ig-card p-4 mt-4 text-center">
+                <p class="mb-2">
+                        The bot is currently in
+                        <b><%= (global.db.allThreadData || []).length %> chats</b>
+                        and used by
+                        <b><%= (global.db.allUserData || []).length %> users</b>.
+                </p>
+                <% if (global.botID) { %>
+                <button class="btn btn-phoenix-primary rounded-5" id="addme">
+                        <i class="fa-brands fa-instagram me-1"></i> Add the bot to your chat
+                </button>
+                <% } else { %>
+                <button class="btn btn-phoenix-danger rounded-5" disabled>
+                        The bot is currently offline
+                </button>
+                <% } %>
+        </div>
+
+        <div class="text-center text-muted mt-4 mb-2 small">
+                Made by <a href="https://github.com/lazyneoaz" target="_blank" rel="noopener" class="ig-gradient-text fw-semibold">lazyneoaz (Saifullah Al Neoaz)</a>
+                &middot; forked from NTKhang's GoatBot V2
+                &middot; powered by @lazyneoaz/ig-chat-api
+        </div>
+</div>
+
+<script type="text/javascript">
+  (function() {
+    const btn = $('#addme');
+                if (btn.length > 0) {
+                        btn.on("click", () => {
+                                window.open("https://www.instagram.com/", "_blank");
+                        });
+                }
+  })();
+</script>
+
+<%~ includeFile('partials/footer.eta') %>

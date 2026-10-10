@@ -1,0 +1,163 @@
+{
+  "instagramAccount": {
+    "userAgent": "Mozilla/5.0 (Linux; Android 12; M2102J20SG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Mobile Safari/537.36",
+    "proxy": null,
+    "notes": "Instagram bot account session is read from account.txt (cookies or appState, see README). This object only holds the user agent used for HTTP requests against Instagram."
+  },
+  "antiInbox": false,
+  "language": "en",
+  "notesLanguage": "change to your language with ISO 639-1 code, available languages: vi (Vietnamese), en (English)",
+  "nickNameBot": "NKX",
+  "prefix": "~",
+  "adminOnly": {
+    "enable": false,
+    "ignoreCommand": []
+  },
+  "adminBot": [
+    "52943709733"
+  ],
+  "whiteListMode": {
+    "enable": false,
+    "whiteListIds": [],
+    "notes": "if you enable this feature, only the ids in the whiteListIds list can use the bot"
+  },
+  "whiteListModeThread": {
+    "enable": false,
+    "whiteListThreadIds": [],
+    "notes": "if you enable this feature, only the thread in the whiteListThreadIds list can use the bot",
+    "how_it_work": "if you enable both whiteListMode and whiteListModeThread, the system will check if the user is in whiteListIds, then check if the thread is in whiteListThreadIds, if one of the conditions is true, the user can use the bot"
+  },
+  "database": {
+    "type": "sqlite",
+    "uriMongodb": "",
+    "autoSyncWhenStart": false,
+    "autoRefreshThreadInfoFirstTime": true,
+    "notes": "(1) type selects 'json' or 'sqlite' or 'mongodb'. If you choose mongodb, enter uri connect mongodb in the uriMongodb section. I recommend using 'mongodb' or 'sqlite', json is not recommended because it is not stable. (2) when you set autoSyncWhenStart to true, the bot will automatically synchronize the data in the database when starting the bot, this will make the bot start slower. (3) when you set autoRefreshThreadInfoFirstTime to true, the bot will automatically refresh the thread information when get first message from the thread since starting the bot"
+  },
+  "timeZone": "Asia/Ho_Chi_Minh",
+  "credentials": {
+    "gmailAccount": {
+      "email": "",
+      "clientId": "",
+      "clientSecret": "",
+      "refreshToken": "",
+      "apiKey": ""
+    },
+    "gRecaptcha": {
+      "siteKey": "",
+      "secretKey": ""
+    }
+  },
+  "dashBoard": {
+    "enable": true,
+    "expireVerifyCode": 300000,
+    "port": 3001
+  },
+  "serverUptime": {
+    "enable": false,
+    "port": 3001,
+    "socket": {
+      "enable": false,
+      "channelName": "uptime",
+      "verifyToken": "",
+      "notes": "Socket.IO status channel. Set a strong random verifyToken before enabling. The socket only pushes status; it does not change how autoUptime pings."
+    }
+  },
+  "autoRestart": {
+    "time": null,
+    "notes": "you can set time is interval with milisecond or cron time, example: 1000, 10000, 60000, 3600000, 86400000, 0 0 * * *,... docs: https://www.npmjs.com/package/node-cron. If you set time is 0 or false or null, the bot will not auto restart"
+  },
+  "autoUptime": {
+    "enable": false,
+    "timeInterval": 180,
+    "url": "",
+    "notes": "Self-ping keep-alive: periodically GETs this bot's own /uptime endpoint so the host (Replit, Glitch, free tiers) does not sleep the process. timeInterval is in seconds; set enable=true to turn it on. url overrides the target (otherwise auto-detected for Replit / Glitch / Render / Railway). Instagram edition by lazyneoaz."
+  },
+  "autoLoadScripts": {
+    "enable": false,
+    "ignoreCmds": "",
+    "ignoreEvents": "",
+    "notes": "this feature will automatically load the script when scripts have been changed, you can set ignoreCmds to ignore commands, ignoreEvents to ignore events, separate by comma or space, example: \"cmd1.js cmd2.js cmd3.js\" (without backslash)"
+  },
+  "autoRefreshSession": true,
+  "gbanCheck": false,
+  "notesGbanCheck": "Check against the upstream Facebook GBAN list on login. Disabled by default for the Instagram edition because IG ids can collide with Facebook uids and the check hard-exits when GitHub is unreachable.",
+  "autoReloginWhenChangeAccount": false,
+  "autoRestartWhenListenMqttError": false,
+  "restartListenMqtt": {
+    "enable": true,
+    "timeRestart": 3600000,
+    "delayAfterStopListening": 2000,
+    "logNoti": true,
+    "notes": "the value of timeRestart and delayAfterStopListening is milisecond, You shouldn't edit this if you don't know what it is"
+  },
+  "notiWhenListenMqttError": {
+    "notes": "This is the message when the bot is listening to the realtime (realtime) server and the server stops working due to account problems such as: locked acc, blocked due to spam,... bot will automatically send notifications to parts of your settings. You must change enable to true to use this feature. See bot/login/handlerWhenListenHasError.js file for details on how it works",
+    "gmail": {
+      "enable": false,
+      "emailGetNoti": "",
+      "note": "Bot will use gmailAccount to send email to emailGetNoti, can send notifications to many email, separate by comma or space, example: \"example1@gmail.com example2@gmail.com\" (without backslash)"
+    },
+    "telegram": {
+      "enable": false,
+      "botToken": "",
+      "chatId": "",
+      "note": "Can send notifications to many chatId, separate by comma or space, example: \"123456789 987654321\" (without backslash)"
+    },
+    "discordHook": {
+      "enable": false,
+      "webhookUrl": "",
+      "note": "Can send notifications to many webhookUrl, separate by comma or space, example: \"https://discord.com/api/webhooks/123456789/123456789 https://discord.com/api/webhooks/987654321/987654321\" (without backslash)"
+    }
+  },
+  "hideNotiMessage": {
+    "commandNotFound": false,
+    "adminOnly": false,
+    "threadBanned": false,
+    "userBanned": false,
+    "needRoleToUseCmd": false,
+    "needRoleToUseCmdOnReply": false,
+    "needRoleToUseCmdOnReaction": false
+  },
+  "logEvents": {
+    "disableAll": false,
+    "message": true,
+    "message_reaction": true,
+    "message_unsend": true,
+    "message_reply": true,
+    "event": true,
+    "read_receipt": false,
+    "typ": false,
+    "presence": false
+  },
+  "optionsFca": {
+    "forceLogin": true,
+    "listenEvents": true,
+    "updatePresence": true,
+    "listenTyping": true,
+    "logLevel": "error",
+    "selfListen": false,
+    "selfListenEvent": true,
+    "autoMarkDelivery": false,
+    "autoReconnect": true,
+    "minRequestInterval": 350,
+    "keepAliveInterval": 240000,
+    "tokenRefreshInterval": 600000,
+    "proxy": null,
+    "notes": "Options passed to @lazyneoaz/ig-chat-api.login(). See https://www.npmjs.com/package/@lazyneoaz/ig-chat-api for the full option list and keep-alive / token-refresh settings. minRequestInterval (ms) spaces every API call so a command burst cannot look like automation. Engine-internal keys (proxy, dgwHost, userAgent, ...) are server-owned and ignored by the hosted client; the server applies its own proxy, so a datacenter host should be configured there."
+  },
+  "customFeatures": {
+    "unsendOnReaction": {
+      "enable": false,
+      "reactions": [
+        "😠",
+        "😡"
+      ],
+      "notes": "when a bot admin (role 2) reacts to a message the bot sent with one of the reactions below, the bot unsends that message. Add/remove emojis in the reactions array to change which ones trigger it. Toggle with the unsendonreaction command."
+    },
+    "noPrefix": {
+      "enable": false,
+      "notes": "allow bot admins (role 2) to use commands without a prefix. Normal messages are never treated as commands: a message only runs a command when its first word exactly matches a command name or alias (e.g. \"help\" instead of \"-help\"). Toggle with the noprefix command."
+    }
+  }
+}

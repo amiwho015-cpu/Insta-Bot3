@@ -1,0 +1,32 @@
+<% /* <!-- NOTE: DO NOT EDIT/DELETE ANY CONTENTS HERE!! --> */ %>
+<% /* <!-- LƯU Ý: KHÔNG SỬA / XÓA BẤT KỲ NỘI DUNG NÀO TẠI ĐÂY!! --> */ %>
+</div>
+
+<footer class="ig-footer d-flex flex-wrap justify-content-between align-items-center py-4 mt-5 mx-4">
+        <div class="mb-2 mb-md-0">
+                <div class="fw-bold">
+                        <span class="ig-gradient-text">Goat Bot IG</span>
+                        <span class="text-muted fw-normal">&mdash; Instagram edition</span>
+                </div>
+                <div class="text-muted small mt-1">
+                        Made by <span class="fw-semibold">lazyneoaz (Saifullah Al Neoaz)</span>
+                        &middot; forked from NTKhang's GoatBot V2
+                </div>
+        </div>
+
+        <ul class="nav list-unstyled d-flex align-items-center mb-0">
+                <li class="ms-3"><a class="text-muted" href="https://github.com/lazyneoaz" target="_blank" rel="noopener" title="GitHub: lazyneoaz">
+                        <i class="fs-3 fa-brands fa-github"></i>
+                </a></li>
+                <li class="ms-3"><a class="text-muted" href="https://www.npmjs.com/package/@lazyneoaz/ig-chat-api" target="_blank" rel="noopener" title="npm: @lazyneoaz/ig-chat-api">
+                        <i class="fs-3 fa-brands fa-npm"></i>
+                </a></li>
+                <li class="ms-3"><a class="text-muted" href="https://github.com/imneoazbro/Goat-Bot-IG" target="_blank" rel="noopener" title="Source: Goat-Bot-IG">
+                        <i class="fs-3 fa-solid fa-code-branch"></i>
+                </a></li>
+        </ul>
+</footer>
+
+</body>
+
+</html>

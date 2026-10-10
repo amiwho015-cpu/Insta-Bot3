@@ -1,0 +1,50 @@
+const fs = require("fs-extra");
+
+module.exports = {
+	config: {
+		name: "selflisten",
+		aliases: ["sl", "selflistenmode"],
+		version: "1.0",
+		author: "Neoaz 🐊",
+		countDown: 5,
+		role: 2,
+		description: {
+			en: "turn on/off selfListen so the bot also receives messages sent by itself"
+		},
+		category: "owner",
+		guide: {
+			en: "   {pn} [on | off]: turn on/off selfListen"
+				+ "\n   {pn} status: show the current selfListen value"
+				+ "\n   selfListen is applied immediately, no restart needed"
+		}
+	},
+
+	langs: {
+		en: {
+			turnedOn: "✅ Turned on selfListen. It is now active.",
+			turnedOff: "✅ Turned off selfListen. It is now active.",
+			status: "📌 selfListen is currently %1",
+			on: "on",
+			off: "off"
+		}
+	},
+
+	onStart: async function ({ args, message, getLang }) {
+		const option = args[0] ? args[0].toLowerCase() : "";
+		const optionsFca = global.GoatBot.config.optionsFca || (global.GoatBot.config.optionsFca = {});
+
+		if (!option || option === "status" || option === "check")
+			return message.reply(getLang("status", optionsFca.selfListen === true ? getLang("on") : getLang("off")));
+
+		if (option !== "on" && option !== "off")
+			return message.SyntaxError();
+
+		const value = option === "on";
+		optionsFca.selfListen = value;
+		global.GoatBot.config.optionsFca.selfListen = value;
+		fs.writeFileSync(global.client.dirConfig, JSON.stringify(global.GoatBot.config, null, 2));
+		if (global.GoatBot.fcaApi && typeof global.GoatBot.fcaApi.setOptions === "function")
+			global.GoatBot.fcaApi.setOptions({ selfListen: value });
+		return message.reply(getLang(value ? "turnedOn" : "turnedOff"));
+	}
+};

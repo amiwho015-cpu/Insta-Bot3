@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 240" width="1000" height="240" role="img" aria-label="GoatBot IG - Instagram Direct Chat Bot by lazyneoaz">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b0f1a"/>
+      <stop offset="0.5" stop-color="#12102a"/>
+      <stop offset="1" stop-color="#1a0f22"/>
+    </linearGradient>
+
+    <linearGradient id="title" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#feda75">
+        <animate attributeName="stop-color" values="#feda75;#d62976;#962fbf;#4f5bd5;#feda75" dur="8s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="0.5" stop-color="#fa7e1e">
+        <animate attributeName="stop-color" values="#fa7e1e;#962fbf;#4f5bd5;#feda75;#fa7e1e" dur="8s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="1" stop-color="#d62976">
+        <animate attributeName="stop-color" values="#d62976;#4f5bd5;#feda75;#fa7e1e;#d62976" dur="8s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#d62976" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#d62976" stop-opacity="0"/>
+    </radialGradient>
+
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="14"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="240" rx="24" fill="url(#bg)"/>
+
+  <circle cx="170" cy="120" r="150" fill="url(#glow)" filter="url(#soft)">
+    <animate attributeName="cx" values="170;830;170" dur="14s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="840" cy="70" r="130" fill="url(#glow)" filter="url(#soft)">
+    <animate attributeName="cy" values="70;190;70" dur="11s" repeatCount="indefinite"/>
+  </circle>
+
+  <rect x="1.5" y="1.5" width="997" height="237" rx="23" fill="none" stroke="#ffffff" stroke-opacity="0.10"/>
+
+  <rect x="345" y="118" width="310" height="3" rx="1.5" fill="url(#title)" opacity="0.55">
+    <animate attributeName="opacity" values="0.25;0.85;0.25" dur="3.2s" repeatCount="indefinite"/>
+  </rect>
+
+  <text x="500" y="106" text-anchor="middle"
+        font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif"
+        font-size="78" font-weight="800" letter-spacing="1"
+        fill="url(#title)">GoatBot IG</text>
+
+  <text x="500" y="160" text-anchor="middle"
+        font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif"
+        font-size="21" font-weight="500" letter-spacing="0.5"
+        fill="#c9c9d6" opacity="0.92">Instagram Direct Chat Bot</text>
+
+  <text x="500" y="198" text-anchor="middle"
+        font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif"
+        font-size="17" font-weight="600" letter-spacing="0.5"
+        fill="#8b8ba7">by lazyneoaz &#183; Saifullah Al Neoaz</text>
+
+  <circle cx="300" cy="193" r="5.5" fill="#31d158">
+    <animate attributeName="opacity" values="1;0.2;1" dur="1.6s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="700" cy="193" r="5.5" fill="#31d158">
+    <animate attributeName="opacity" values="0.2;1;0.2" dur="1.6s" repeatCount="indefinite"/>
+  </circle>
+</svg>
