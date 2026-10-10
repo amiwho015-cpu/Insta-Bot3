@@ -51,6 +51,9 @@
                 "totp-generator": "^1.0.0",
                 "ws": "^8.18.0"
         },
+        "overrides": {
+                "canvas": "3.2.3"
+        },
         "scripts": {
                 "start": "node index.js",
                 "dev": "cross-env NODE_ENV=development node index.js",
