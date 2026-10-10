@@ -21,7 +21,7 @@ function attempt(fn, args, timeoutMs) {
 			clearTimeout(timer);
 			error ? reject(error) : resolve(result);
 		};
-		const timer = setTimeout(() => finish(new Error("unsend timed out")), timeoutMs || 12000);
+		const timer = setTimeout(() => finish(new Error("unsend timed out")), timeoutMs || 8000);
 		try {
 			const ret = fn(...args, finish);
 			if (ret && typeof ret.then === "function") ret.then(r => finish(null, r), e => finish(e));
@@ -76,6 +76,7 @@ module.exports = function installApiCompat(api) {
 
 	const rawUnsend = typeof api.unsendMessage === "function" ? api.unsendMessage.bind(api) : null;
 
+	api.__rawUnsend = rawUnsend;
 	api.unsendMessage = async function unsendMessage(messageID, ...rest) {
 		if (!rawUnsend) throw new Error("unsendMessage is not available");
 		const callback = [...rest].reverse().find(a => typeof a === "function");
@@ -117,6 +118,7 @@ module.exports = function installApiCompat(api) {
 				}
 			}
 		}
+		console.log(`[unsend-fail] message=${messageID} thread=${threadID} :: ${errors.join(" | ") || "no error text"}`);
 		const lastError = new Error(errors.join(" | ") || "unsend failed");
 		lastError.attempts = errors;
 		if (typeof callback === "function") { callback(lastError); return; }
