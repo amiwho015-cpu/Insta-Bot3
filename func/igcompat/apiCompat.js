@@ -12,6 +12,16 @@ function remember(messageID, threadID) {
 	if (THREADS.size > MAX) THREADS.delete(THREADS.keys().next().value);
 }
 
+/** Instagram answers some failures as a normal result: {action:"item_ack", message:"...went wrong"} */
+function ackFailure(result) {
+	if (!result || typeof result !== "object") return null;
+	const msg = typeof result.message === "string" ? result.message : "";
+	const status = typeof result.status === "string" ? result.status : "";
+	if (/sorry|went wrong|try again|error|fail/i.test(msg)) return msg;
+	if (status && !/^(ok|success)$/i.test(status)) return `status ${status}${msg ? ": " + msg : ""}`;
+	return null;
+}
+
 function attempt(fn, args, timeoutMs) {
 	return new Promise((resolve, reject) => {
 		let done = false;
@@ -19,6 +29,7 @@ function attempt(fn, args, timeoutMs) {
 			if (done) return;
 			done = true;
 			clearTimeout(timer);
+			if (!error) { const bad = ackFailure(result); if (bad) error = new Error(bad); }
 			error ? reject(error) : resolve(result);
 		};
 		const timer = setTimeout(() => finish(new Error("unsend timed out")), timeoutMs || 8000);
@@ -83,40 +94,50 @@ module.exports = function installApiCompat(api) {
 		const given = rest.find(a => typeof a === "string" || typeof a === "number");
 		const threadID = given != null ? String(given) : THREADS.get(String(messageID));
 
+		const idStr = String(messageID);
 		const forms = [];
-		if (threadID != null) {
-			forms.push([String(messageID), threadID]);   // (messageID, threadID, cb)
-			forms.push([threadID, String(messageID)]);   // (threadID, messageID, cb)
+		forms.push([idStr]);                                          // documented: (messageID, cb)
+		if (threadID != null && !idStr.includes(":")) {
+			forms.push([`${threadID}:${idStr}`]);                     // documented: "<threadID>:<itemID>"
+			forms.push([idStr, threadID]);                            // (messageID, threadID, cb)
+			forms.push([threadID, idStr]);                            // (threadID, messageID, cb)
 		}
-		forms.push([String(messageID)]);                   // (messageID, cb)
 
 		const errors = [];
-		for (const args of forms) {
-			try {
-				const result = await attempt(rawUnsend, args);
-				if (typeof callback === "function") callback(null, result);
-				return result;
-			}
-			catch (error) {
-				const text = error && (error.message || error.error || (typeof error === "string" ? error : JSON.stringify(error)));
-				errors.push(`(${args.length} args) ${String(text).slice(0, 160)}`);
-			}
-		}
-		// last resort: other unsend-like methods the Instagram client may expose
-		for (const name of unsendLikeMethods(api)) {
-			if (name === "unsendMessage") continue;
-			const fn = api[name].bind(api);
-			const combos = threadID != null ? [[String(messageID), threadID], [threadID, String(messageID)]] : [[String(messageID)]];
-			for (const args of combos) {
-				try {
-					const result = await attempt(fn, args);
-					if (typeof callback === "function") callback(null, result);
-					return result;
-				}
+		const sleep = ms => new Promise(r => setTimeout(r, ms));
+		const runOnce = async () => {
+			// 1) documented unsendMessage call shapes
+			for (const args of forms) {
+				try { return await attempt(rawUnsend, args); }
 				catch (error) {
-					errors.push(`${name}: ${String((error && error.message) || error).slice(0, 120)}`);
+					const text = error && (error.message || error.error || (typeof error === "string" ? error : JSON.stringify(error)));
+					errors.push(`(${args.length} args) ${String(text).slice(0, 160)}`);
 				}
 			}
+			// 2) other remove-message methods (deleteMessage takes one id or an array of ids)
+			for (const name of unsendLikeMethods(api)) {
+				if (name === "unsendMessage") continue;
+				const fn = api[name].bind(api);
+				const combos = [[idStr], [[idStr]]];
+				if (threadID != null && !idStr.includes(":")) combos.push([`${threadID}:${idStr}`], [idStr, threadID]);
+				for (const args of combos) {
+					try { return await attempt(fn, args); }
+					catch (error) { errors.push(`${name}: ${String((error && error.message) || error).slice(0, 120)}`); }
+				}
+			}
+			return undefined;
+		};
+
+		let result = await runOnce();
+		// Instagram says "something went wrong, please try again" when a message was
+		// sent a moment ago and is not settled yet - wait a little and retry once.
+		if (result === undefined && errors.some(e => /try again|went wrong|timed out/i.test(e))) {
+			await sleep(2500);
+			result = await runOnce();
+		}
+		if (result !== undefined) {
+			if (typeof callback === "function") callback(null, result);
+			return result;
 		}
 		console.log(`[unsend-fail] message=${messageID} thread=${threadID} :: ${errors.join(" | ") || "no error text"}`);
 		const lastError = new Error(errors.join(" | ") || "unsend failed");
@@ -158,3 +179,4 @@ module.exports = function installApiCompat(api) {
 };
 module.exports.remember = remember;
 module.exports.apiMethodHints = apiMethodHints;
+module.exports.ackFailure = ackFailure;

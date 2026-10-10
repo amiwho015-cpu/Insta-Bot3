@@ -22,7 +22,7 @@ function tryRaw(raw, args, ms) {
 			done = true;
 			clearTimeout(timer);
 			const took = Date.now() - started;
-			resolve(error ? `ERR ${String((error && error.message) || error).slice(0, 120)} (${took}ms)` : `OK ${JSON.stringify(result || null).slice(0, 80)} (${took}ms)`);
+			resolve(error ? `ERR ${String((error && error.message) || error).slice(0, 120)} (${took}ms)` : `OK ${JSON.stringify(result || null).slice(0, 220)} (${took}ms)`);
 		};
 		const timer = setTimeout(() => finish(new Error("TIMEOUT no answer")), ms);
 		try {
@@ -68,20 +68,30 @@ module.exports = {
 			}
 		}
 
-		// 2) live test on a message the bot just sent
+		// 2) live test: every call shape, each on its own fresh message
 		const raw = api.__rawUnsend;
 		if (typeof raw !== "function") return say("raw unsend function not found");
-		let sent;
-		try { sent = await api.sendMessage("unsend test message", threadID); }
-		catch (e) { return say("test send failed: " + e.message); }
-		const id = sent && sent.messageID;
-		if (!id) return say("test send gave no messageID: " + JSON.stringify(sent));
-		const lines = [`test id: ${id}\nthread: ${threadID}`];
-		const forms = [[String(id), String(threadID)], [String(threadID), String(id)], [String(id)]];
-		for (const args of forms) {
-			const res = await tryRaw(raw, args, 8000);
-			lines.push(`(${args.map((_, i) => (i === 0 && args.length === 2 && args[0] === String(threadID) ? "thread" : "id/thread")).join(",")}) ${args.length} args -> ${res}`);
-			if (res.startsWith("OK")) break;
+		const thread = String(threadID);
+		const shapes = [
+			["A  unsend(id)", id => [raw, [id]]],
+			["B  unsend(thread:id)", id => [raw, [`${thread}:${id}`]]],
+			["C  unsend(id, thread)", id => [raw, [id, thread]]],
+			["D  unsend(thread, id)", id => [raw, [thread, id]]]
+		];
+		if (typeof api.deleteMessage === "function")
+			shapes.push(["E  deleteMessage(id)", id => [api.deleteMessage.bind(api), [id]]]);
+
+		const lines = ["Each test sends a message and tries to unsend it. Tell me which test messages DISAPPEARED."];
+		for (const [label, build] of shapes) {
+			let sent;
+			try { sent = await api.sendMessage(`TEST ${label}`, threadID); }
+			catch (e) { lines.push(`${label}: send failed ${e.message}`); continue; }
+			const id = sent && sent.messageID && String(sent.messageID);
+			if (!id) { lines.push(`${label}: no messageID (${JSON.stringify(sent)})`); continue; }
+			await new Promise(r => setTimeout(r, 2500));   // let Instagram settle the message first
+			const [fn, args] = build(id);
+			const res = await tryRaw(fn, args, 8000);
+			lines.push(`${label} -> ${res}`);
 		}
 		return say(lines.join("\n"));
 	}
