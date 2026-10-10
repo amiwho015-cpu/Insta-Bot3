@@ -13,7 +13,7 @@ const doNotDelete = "[ 🐐 | Goat Bot V2 ]";
 module.exports = {
 	config: {
 		name: "help",
-		version: "1.21",
+		version: "1.22",
 		author: "NTKhang & Neokex",
 		countDown: 5,
 		role: 0,
@@ -43,6 +43,8 @@ module.exports = {
 			tip: "Type %1help <command name> to view its details",
 			total: "Total Commands: %1",
 			footerTip: "Type: %1help <command> for details",
+			pageInfo: "📄 Page %1/%2",
+			pageNav: "Pages: %1help • %1help2 • %1help3",
 			commandNotFound: "Command \"%1\" does not exist",
 			getInfoCommand: "╭── NAME ────⭓"
 				+ "\n│ %1"
@@ -89,7 +91,7 @@ module.exports = {
 		}
 	},
 
-	onStart: async function ({ message, args, event, threadsData, getLang, role, globalData }) {
+	onStart: async function ({ message, args, event, threadsData, getLang, role, globalData, page = 1 }) {
 		const langCode = await threadsData.get(event.threadID, "data.lang") || global.GoatBot.config.language;
 		let customLang = {};
 		const pathCustomLang = path.normalize(`${process.cwd()}/languages/cmds/${langCode}.js`);
@@ -158,15 +160,23 @@ module.exports = {
 				})
 				.sort((a, b) => a.category.localeCompare(b.category));
 
+			const TOTAL_PAGES = 3;
+			const pages = splitIntoPages(sortedCategories, TOTAL_PAGES);
+			const pageIndex = Math.min(Math.max(Number(page) || 1, 1), TOTAL_PAGES) - 1;
+			const pageCategories = pages[pageIndex] || [];
+
 			let total = 0;
+			for (const { list } of sortedCategories)
+				total += list.length;
+
 			const lines = [];
 			const header = getLang("header");
 			const boxWidth = visualWidth(getLang("categoryFooter"));
 			const pad = Math.max(0, Math.floor((boxWidth - visualWidth(header)) / 2));
 			lines.push(" ".repeat(pad) + header);
+			lines.push(getLang("pageInfo", pageIndex + 1, TOTAL_PAGES));
 
-			for (const { category, list } of sortedCategories) {
-				total += list.length;
+			for (const { category, list } of pageCategories) {
 				lines.push("");
 				lines.push(getLang("categoryHeader", category.toUpperCase()));
 				lines.push(getLang("commandLine", list.map(item => item.name).join(getLang("joiner"))));
@@ -174,6 +184,7 @@ module.exports = {
 			}
 
 			lines.push(getLang("total", total));
+			lines.push(getLang("pageNav", prefix));
 			lines.push(getLang("footerTip", prefix));
 			return message.reply(lines.join("\n"));
 		}
@@ -306,6 +317,25 @@ module.exports = {
 		}
 	}
 };
+
+// Split sorted categories into N pages with a roughly equal number of commands.
+// Categories are never broken across pages.
+function splitIntoPages(sortedCategories, totalPages) {
+	const totalCommands = sortedCategories.reduce((sum, c) => sum + c.list.length, 0);
+	const perPage = Math.ceil(totalCommands / totalPages);
+	const pages = Array.from({ length: totalPages }, () => []);
+	let current = 0;
+	let count = 0;
+	for (const item of sortedCategories) {
+		if (count >= perPage && current < totalPages - 1) {
+			current++;
+			count = 0;
+		}
+		pages[current].push(item);
+		count += item.list.length;
+	}
+	return pages;
+}
 
 function checkLangObject(data, langCode) {
 	if (typeof data == "string")
