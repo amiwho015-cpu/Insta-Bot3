@@ -1,4 +1,5 @@
-const helpCmd = require("./help.js");
+const { getPrefix } = global.utils;
+const { commands } = global.GoatBot;
 
 module.exports = {
 	config: {
@@ -7,21 +8,34 @@ module.exports = {
 		author: "NTKhang & Neokex",
 		countDown: 5,
 		role: 0,
-		description: {
-			en: "View command list (page 3 of 3)"
-		},
+		description: { en: "Show command list - part 3 of 3" },
 		category: "info",
-		guide: {
-			en: "{pn}: show command list page 3"
-				+ "\\n   {pn} <command name>: show command details"
-		},
-		priority: 1
+		guide: { en: "{pn}" }
 	},
 
-	// share the same texts as the main help command
-	langs: helpCmd.langs,
+	onStart: async function ({ message, event, role }) {
+		const prefix = getPrefix(event.threadID);
+		const allNames = [];
+		for (const [name, value] of commands) {
+			if (value.config.role > 1 && role < value.config.role)
+				continue;
+			allNames.push(name);
+		}
+		allNames.sort((x, y) => x.localeCompare(y));
 
-	onStart: async function (ctx) {
-		return helpCmd.onStart({ ...ctx, page: 3 });
+		const total = allNames.length;
+		const partSize = Math.ceil(total / 3);
+		const part = allNames.slice((3 - 1) * partSize, 3 * partSize);
+
+		const lines = [
+			"☠️ NEOKEX AI ☠️",
+			"",
+			"╭─『 PART 3/3 』",
+			"│ " + (part.length ? part.join(" • ") : "No commands in this part"),
+			"╰───────────────♢",
+			`Total Commands: ${total}`,
+			`Type: ${prefix}help <command> for details`
+		];
+		return message.reply(lines.join("\n"));
 	}
 };
