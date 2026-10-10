@@ -45,7 +45,7 @@ module.exports = {
     const { threadID, messageID } = event;
 
     if (args.length === 0) {
-      return api.sendMessage("❌ Please provide a website URL.\nExample: /ss google.com -mobile", threadID, messageID);
+      return api.sendMessage("❌ Please provide a website URL.\nExample: /ss google.com -mobile", threadID, undefined, messageID);
     }
 
     let url = args[0];
@@ -67,10 +67,10 @@ module.exports = {
       return api.sendMessage({
         body: `📸 Screenshot`,
         attachment: stream
-      }, threadID, messageID);
+      }, threadID, undefined, messageID);
     } catch (error) {
       console.error(error);
-      return api.sendMessage(`❌ Failed to capture screenshot. Please check the URL and try again.`, threadID, messageID);
+      return api.sendMessage(`❌ Failed to capture screenshot. Please check the URL and try again.`, threadID, undefined, messageID);
     }
   }
 };

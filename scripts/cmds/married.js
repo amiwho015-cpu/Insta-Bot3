@@ -29,10 +29,10 @@ module.exports = {
       const nameMentioned = await usersData.getName(mentionedID);
       const avatarSender =
         (await usersData.getAvatarUrl(senderID)) ||
-        `https://graph.facebook.com/${senderID}/picture?width=512&height=512`;
+        (await global.utils.igAvatarUrl(senderID));
       const avatarMentioned =
         (await usersData.getAvatarUrl(mentionedID)) ||
-        `https://graph.facebook.com/${mentionedID}/picture?width=512&height=512`;
+        (await global.utils.igAvatarUrl(mentionedID));
 
       const [avatarImgSender, avatarImgMentioned, bg] = await Promise.all([
         Canvas.loadImage(avatarSender),

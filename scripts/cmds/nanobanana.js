@@ -48,7 +48,7 @@ module.exports = {
     const prompt = args.join(" ");
 
     if (!prompt) {
-      return api.sendMessage("Please provide a prompt to generate an image.", threadID, messageID);
+      return api.sendMessage("Please provide a prompt to generate an image.", threadID, undefined, messageID);
     }
 
     try {
@@ -60,13 +60,13 @@ module.exports = {
       await api.sendMessage({
         body: "𝗡𝗔𝗡𝗢𝗕𝗔𝗡𝗔𝗡𝗔 𝗔𝗜 𝗚𝗘𝗡𝗘𝗥𝗔𝗧𝗘𝗗 🎨",
         attachment: response.data
-      }, threadID, messageID);
+      }, threadID, undefined, messageID);
 
       return api.setMessageReaction("✅", messageID, () => {}, true);
 
     } catch (error) {
       api.setMessageReaction("❌", messageID, () => {}, true);
-      return api.sendMessage("Failed to generate image. Please try again later.", threadID, messageID);
+      return api.sendMessage("Failed to generate image. Please try again later.", threadID, undefined, messageID);
     }
   }
 };

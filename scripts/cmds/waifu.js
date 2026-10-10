@@ -55,11 +55,11 @@ module.exports = {
             return api.sendMessage({
                 body: "❖ 𝗪𝗔𝗜𝗙𝗨 𝗜𝗠𝗔𝗚𝗘 ❖\n━━━━━━━━━━━━━━━━━━\n",
                 attachment: stream
-            }, threadID, messageID);
+            }, threadID, undefined, messageID);
 
         } catch (error) {
             api.setMessageReaction("❌", messageID, () => {}, true);
-            return api.sendMessage("✕ Failed to fetch anime image!", threadID, messageID);
+            return api.sendMessage("✕ Failed to fetch anime image!", threadID, undefined, messageID);
         }
     }
 };

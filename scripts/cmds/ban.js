@@ -82,17 +82,17 @@ module.exports = {
 			else if (event.messageReply?.senderID)
 				target = event.messageReply.senderID;
 			else
-				return api.sendMessage(getLang('notFoundTargetUnban'), event.threadID, event.messageID);
+				return api.sendMessage(getLang('notFoundTargetUnban'), event.threadID, undefined, event.messageID);
 
 			const index = dataBanned.findIndex(item => item.id == target);
 			if (index == -1)
-				return api.sendMessage(getLang('userNotBanned', target), event.threadID, event.messageID);
+				return api.sendMessage(getLang('userNotBanned', target), event.threadID, undefined, event.messageID);
 
 			dataBanned.splice(index, 1);
 			await threadsData.set(event.threadID, dataBanned, 'data.banned_ban');
 			const userName = members[target]?.name || await usersData.getName(target) || getLang('noName');
 
-			return api.sendMessage(getLang('unbannedSuccess', userName), event.threadID, event.messageID);
+			return api.sendMessage(getLang('unbannedSuccess', userName), event.threadID, undefined, event.messageID);
 		}
 		else if (args[0] == "check") {
 			if (!dataBanned.length)

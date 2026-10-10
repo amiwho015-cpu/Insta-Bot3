@@ -50,7 +50,7 @@ module.exports = {
     if (type === "message_reply" && messageReply.attachments[0]?.type === "photo") {
       imageUrl = messageReply.attachments[0].url;
     } else {
-      return api.sendMessage("╭─❍\n│ 𝖯𝗅𝖾𝖺𝗌𝖾 𝗋𝖾𝗉𝗅𝗒 𝗍𝗈 𝖺𝗇 𝗂𝗆𝖺𝗀𝖾!\n╰───────────⟡", threadID, messageID);
+      return api.sendMessage("╭─❍\n│ 𝖯𝗅𝖾𝖺𝗌𝖾 𝗋𝖾𝗉𝗅𝗒 𝗍𝗈 𝖺𝗇 𝗂𝗆𝖺𝗀𝖾!\n╰───────────⟡", threadID, undefined, messageID);
     }
 
     const lang = args[0] || "eng";
@@ -65,7 +65,7 @@ module.exports = {
         
         return api.sendMessage(
           ` 𝗟𝗘𝗡𝗦 𝗢𝗖𝗥\n━━━━━━━━━━━━━━━━━━\n${extractedText}\n𝗟𝗮𝗻𝗴: ${lang.toUpperCase()}`, 
-          threadID, messageID
+          threadID, undefined, messageID
         );
       } else {
         throw new Error("No text found");
@@ -73,7 +73,7 @@ module.exports = {
 
     } catch (error) {
       api.setMessageReaction("❌", messageID, () => {}, true);
-      return api.sendMessage("✕ Failed to extract text from image!", threadID, messageID);
+      return api.sendMessage("✕ Failed to extract text from image!", threadID, undefined, messageID);
     }
   }
 };

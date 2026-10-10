@@ -47,13 +47,13 @@ module.exports = {
     const API_URL = `${await getApiBaseUrl()}/api/tik`;
 
     if (args.length === 0) {
-      return api.sendMessage("╭─❍\n│ Usage: {pn} [query]\n│ List: {pn} [query] -list\n╰───────────⟡", threadID, messageID);
+      return api.sendMessage("╭─❍\n│ Usage: {pn} [query]\n│ List: {pn} [query] -list\n╰───────────⟡", threadID, undefined, messageID);
     }
 
     const isList = args.includes("-list");
     const searchQuery = args.filter(arg => arg !== "-list").join(" ");
 
-    if (!searchQuery) return api.sendMessage("✕ Please provide a search query!", threadID, messageID);
+    if (!searchQuery) return api.sendMessage("✕ Please provide a search query!", threadID, undefined, messageID);
 
     api.setMessageReaction("🔍", messageID, () => {}, true);
 
@@ -63,7 +63,7 @@ module.exports = {
 
       if (!results || results.length === 0) {
         api.setMessageReaction("❌", messageID, () => {}, true);
-        return api.sendMessage("✕ No videos found!", threadID, messageID);
+        return api.sendMessage("✕ No videos found!", threadID, undefined, messageID);
       }
 
       if (isList) {
@@ -94,11 +94,11 @@ module.exports = {
 
       return api.sendMessage({
         attachment: videoStream
-      }, threadID, messageID);
+      }, threadID, undefined, messageID);
 
     } catch (error) {
       api.setMessageReaction("❌", messageID, () => {}, true);
-      return api.sendMessage("✕ API Error or Timeout!", threadID, messageID);
+      return api.sendMessage("✕ API Error or Timeout!", threadID, undefined, messageID);
     }
   },
 
@@ -110,7 +110,7 @@ module.exports = {
 
     const index = parseInt(body) - 1;
     if (isNaN(index) || index < 0 || index >= results.length) {
-      return api.sendMessage("✕ Invalid selection!", threadID, messageID);
+      return api.sendMessage("✕ Invalid selection!", threadID, undefined, messageID);
     }
 
     api.unsendMessage(Reply.messageID);
@@ -121,9 +121,9 @@ module.exports = {
       return api.sendMessage({
         body: `❖ 𝗧𝗜𝗞𝗧𝗢𝗞 𝗗𝗢𝗪𝗡𝗟𝗢𝗔𝗗 ❖\n━━━━━━━━━━━━━━━━━━\n📝 Title: ${results[index].title}`,
         attachment: videoStream
-      }, threadID, messageID);
+      }, threadID, undefined, messageID);
     } catch (error) {
-      return api.sendMessage("✕ Failed to download video!", threadID, messageID);
+      return api.sendMessage("✕ Failed to download video!", threadID, undefined, messageID);
     }
   }
 };

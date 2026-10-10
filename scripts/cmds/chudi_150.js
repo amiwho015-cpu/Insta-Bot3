@@ -16,7 +16,7 @@ module.exports.onStart = async function({ api, event, args }) {
     if (type === "message_reply") targetID = messageReply.senderID;
     else if (Object.keys(mentions).length > 0) targetID = Object.keys(mentions)[0];
 
-    if (!targetID) return api.sendMessage("Kire vodai, jare gali dibi tare mention de!", threadID, messageID);
+    if (!targetID) return api.sendMessage("Kire vodai, jare gali dibi tare mention de!", threadID, undefined, messageID);
 
     const userInfo = await api.getUserInfo(targetID);
     name = userInfo[targetID].name;

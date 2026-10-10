@@ -55,7 +55,7 @@ module.exports = {
 │ gif list
 ╰───────────⟡`,
         threadID,
-        messageID
+        undefined, messageID
       );
     }
 
@@ -77,7 +77,7 @@ module.exports = {
 │ ${data.available_categories.join(", ")}
 ╰───────────⟡`,
           threadID,
-          messageID
+          undefined, messageID
         );
       }
 
@@ -96,7 +96,7 @@ module.exports = {
           attachment: stream
         },
         threadID,
-        messageID
+        undefined, messageID
       );
 
     } catch (err) {
@@ -104,7 +104,7 @@ module.exports = {
       return api.sendMessage(
         `Error: ${err.message}`,
         threadID,
-        messageID
+        undefined, messageID
       );
     }
   }

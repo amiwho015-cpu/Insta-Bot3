@@ -42,7 +42,7 @@ module.exports = {
       const name = userInfo[targetID].name;
 
       const cowImgUrl = "https://i.imgur.com/ortfty0.jpeg";
-      const avatarUrl = `https://graph.facebook.com/${targetID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
+      const avatarUrl = (await global.utils.igAvatarUrl(targetID));
 
       const [cowImg, avatarImg] = await Promise.all([
         loadImage(cowImgUrl),
@@ -80,7 +80,7 @@ module.exports = {
     } catch (e) {
       console.error(e);
       api.setMessageReaction("❌", messageID, () => {}, true);
-      return api.sendMessage("Error executing command ❌", threadID, messageID);
+      return api.sendMessage("Error executing command ❌", threadID, undefined, messageID);
     }
   }
 };

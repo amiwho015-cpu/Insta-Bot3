@@ -1055,6 +1055,29 @@ function resolveOptionalModule(baseDir, baseName) {
 	return path.normalize(`${baseDir}/${candidates[0]}`);
 }
 
+// ── Instagram avatar helper ─────────────────────────────────────────────
+// Facebook's graph.facebook.com/<id>/picture does not work for Instagram IDs
+// (it returns the grey "?" silhouette). This returns the REAL Instagram
+// profile picture URL for a user id, with a short cache and a safe fallback.
+const _igAvatarCache = new Map();
+const IG_DEFAULT_AVATAR = "https://www.instagram.com/static/images/ico/favicon-192.png/68d99ba29cc8.png";
+async function igAvatarUrl(userID) {
+	userID = String(userID || "");
+	const cached = _igAvatarCache.get(userID);
+	if (cached && Date.now() - cached.time < 10 * 60 * 1000)
+		return cached.url;
+	let url = null;
+	try {
+		const info = await global.GoatBot.fcaApi.getUserInfo(userID);
+		const u = info && (info[userID] || Object.values(info)[0]);
+		url = u && (u.profileUrl || u.thumbSrc || u.profilePicUrl || u.profile_pic_url || u.avatar) || null;
+	}
+	catch (e) { /* fall through to default */ }
+	if (url)
+		_igAvatarCache.set(userID, { url, time: Date.now() });
+	return url || IG_DEFAULT_AVATAR;
+}
+
 const utils = {
 	CustomError,
 	TaskQueue,
@@ -1091,6 +1114,7 @@ const utils = {
 	getStreamsFromAttachment,
 	getStreamFromURL,
 	getStreamFromUrl: getStreamFromURL,
+	igAvatarUrl,
 	Prism,
 	translate,
 	shortenURL,

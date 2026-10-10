@@ -51,7 +51,7 @@ module.exports = {
         const prompt = args.join(" ");
 
         if (!prompt) {
-            return api.sendMessage("✨ Please enter a prompt!", threadID, messageID);
+            return api.sendMessage("✨ Please enter a prompt!", threadID, undefined, messageID);
         }
 
         api.setMessageReaction("⏳", messageID, (err) => {}, true);
@@ -107,7 +107,7 @@ module.exports = {
 
         } catch (error) {
             api.setMessageReaction("❌", messageID, (err) => {}, true);
-            return api.sendMessage(`⚠️ Error: ${error.message}`, threadID, messageID);
+            return api.sendMessage(`⚠️ Error: ${error.message}`, threadID, undefined, messageID);
         }
     },
 

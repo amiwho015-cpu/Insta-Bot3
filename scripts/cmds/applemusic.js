@@ -104,10 +104,11 @@ module.exports = {
     const sentMsg = await api.sendMessage(
       attachments.length ? { body: msg, attachment: attachments } : msg,
       threadID,
-      messageID
+      undefined, messageID
     );
 
     api.setMessageReaction("✅", messageID, () => {}, true);
+    if (!sentMsg || !sentMsg.messageID) return;
 
     global.GoatBot.onReply.set(sentMsg.messageID, {
       commandName: this.config.name,
@@ -121,12 +122,12 @@ module.exports = {
     const { threadID, messageID, body, senderID } = event;
 
     if (senderID !== Reply.author) {
-      return api.sendMessage("❌ You are not authorized.", threadID, messageID);
+      return api.sendMessage("❌ You are not authorized.", threadID, undefined, messageID);
     }
 
     const index = parseInt(body) - 1;
     if (isNaN(index) || index < 0 || index >= Reply.results.length) {
-      return api.sendMessage(`❌ Invalid choice. Choose 1-${Reply.results.length}.`, threadID, messageID);
+      return api.sendMessage(`❌ Invalid choice. Choose 1-${Reply.results.length}.`, threadID, undefined, messageID);
     }
 
     const track = Reply.results[index];
@@ -167,7 +168,7 @@ module.exports = {
 
     if (!downloadData) {
       api.setMessageReaction("❌", messageID, () => {}, true);
-      return api.sendMessage(`❌ Failed to download: ${lastError?.message || "Unknown error"}`, threadID, messageID);
+      return api.sendMessage(`❌ Failed to download: ${lastError?.message || "Unknown error"}`, threadID, undefined, messageID);
     }
 
     try {
@@ -201,7 +202,7 @@ module.exports = {
     } catch (err) {
       console.error("Download error:", err);
       api.setMessageReaction("❌", messageID, () => {}, true);
-      return api.sendMessage(`❌ Failed to download: ${err.message || "Unknown error"}`, threadID, messageID);
+      return api.sendMessage(`❌ Failed to download: ${err.message || "Unknown error"}`, threadID, undefined, messageID);
     }
   }
 };

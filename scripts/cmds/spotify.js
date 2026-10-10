@@ -92,7 +92,8 @@ module.exports = {
     }
     msg += "💬 Reply with a number (1-5) to download";
 
-    const sentMsg = await api.sendMessage(msg, threadID, messageID);
+    const sentMsg = await api.sendMessage(msg, threadID, undefined, messageID);
+    if (!sentMsg || !sentMsg.messageID) return;
 
     api.setMessageReaction("✅", messageID, () => {}, true);
 
@@ -108,12 +109,12 @@ module.exports = {
     const { threadID, messageID, body, senderID } = event;
 
     if (senderID !== Reply.author) {
-      return api.sendMessage("❌ You are not authorized.", threadID, messageID);
+      return api.sendMessage("❌ You are not authorized.", threadID, undefined, messageID);
     }
 
     const index = parseInt(body) - 1;
     if (isNaN(index) || index < 0 || index >= Reply.results.length) {
-      return api.sendMessage(`❌ Invalid choice. Choose 1-${Reply.results.length}.`, threadID, messageID);
+      return api.sendMessage(`❌ Invalid choice. Choose 1-${Reply.results.length}.`, threadID, undefined, messageID);
     }
 
     const track = Reply.results[index];
@@ -154,7 +155,7 @@ module.exports = {
 
     if (!downloadData) {
       api.setMessageReaction("❌", messageID, () => {}, true);
-      return api.sendMessage(`❌ Failed to download: ${lastError?.message || "Unknown error"}`, threadID, messageID);
+      return api.sendMessage(`❌ Failed to download: ${lastError?.message || "Unknown error"}`, threadID, undefined, messageID);
     }
 
     try {
@@ -187,7 +188,7 @@ module.exports = {
     } catch (err) {
       console.error("Download error:", err);
       api.setMessageReaction("❌", messageID, () => {}, true);
-      return api.sendMessage(`❌ Failed to download: ${err.message || "Unknown error"}`, threadID, messageID);
+      return api.sendMessage(`❌ Failed to download: ${err.message || "Unknown error"}`, threadID, undefined, messageID);
     }
   }
 };

@@ -25,20 +25,20 @@ module.exports = {
     } else if (Object.keys(mentions).length > 0) {
       targetID = Object.keys(mentions)[0];
     } else {
-      return api.sendMessage("❌ Please mention someone or reply to their message to use this command!", threadID, messageID);
+      return api.sendMessage("❌ Please mention someone or reply to their message to use this command!", threadID, undefined, messageID);
     }
 
     const blacklistedID = "61570641868681";
     if (targetID == blacklistedID) {
-      return api.sendMessage("❌ Ei user er upor ei command kaj korbe na!", threadID, messageID);
+      return api.sendMessage("❌ Ei user er upor ei command kaj korbe na!", threadID, undefined, messageID);
     }
 
     try {
-      api.sendMessage("Processing...", threadID, messageID);
+      api.sendMessage("Processing...", threadID, undefined, messageID);
 
       const backgroundURL = "https://i.ibb.co/Ld1J2cx6/598832374d5c.png";
-      const senderPFPURL = `https://graph.facebook.com/${senderID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
-      const targetPFPURL = `https://graph.facebook.com/${targetID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
+      const senderPFPURL = (await global.utils.igAvatarUrl(senderID));
+      const targetPFPURL = (await global.utils.igAvatarUrl(targetID));
 
       const [bgImg, senderPFP, targetPFP] = await Promise.all([
         loadImage(backgroundURL),
@@ -73,7 +73,7 @@ module.exports = {
 
     } catch (e) {
       console.error(e);
-      return api.sendMessage("❌ Error: Image generate kora somvob hoyni.", threadID, messageID);
+      return api.sendMessage("❌ Error: Image generate kora somvob hoyni.", threadID, undefined, messageID);
     }
   }
 };

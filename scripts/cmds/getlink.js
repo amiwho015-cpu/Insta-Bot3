@@ -15,12 +15,12 @@ module.exports = {
     const { threadID, messageID, messageReply } = event;
 
     if (!messageReply) {
-      return api.sendMessage("❌ Please reply to an image, video, or voice message.", threadID, messageID);
+      return api.sendMessage("❌ Please reply to an image, video, or voice message.", threadID, undefined, messageID);
     }
 
     const attachments = messageReply.attachments;
     if (!attachments || attachments.length === 0) {
-      return api.sendMessage("❌ No attachments found in the replied message.", threadID, messageID);
+      return api.sendMessage("❌ No attachments found in the replied message.", threadID, undefined, messageID);
     }
 
     try {
@@ -53,10 +53,10 @@ module.exports = {
         ? `🔗 Direct link:\n${links[0]}`
         : `🔗 Direct links:\n${links.join("\n")}`;
 
-      return api.sendMessage(replyMsg, threadID, messageID);
+      return api.sendMessage(replyMsg, threadID, undefined, messageID);
     } catch (err) {
       console.error(err);
-      return api.sendMessage("❌ Failed to fetch attachment link. Please try again.", threadID, messageID);
+      return api.sendMessage("❌ Failed to fetch attachment link. Please try again.", threadID, undefined, messageID);
     }
   }
 };

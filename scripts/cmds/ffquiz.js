@@ -35,7 +35,7 @@ module.exports = {
 
 ⏰ 𝐇𝐮𝐫𝐫𝐲! 𝐑𝐞𝐩𝐥𝐲 𝐰𝐢𝐭𝐡 𝐀, 𝐁, 𝐂 or 𝐃`;
 
-      const msg = await api.sendMessage(quizMsg, event.threadID, event.messageID);
+      const msg = await api.sendMessage(quizMsg, event.threadID, undefined, event.messageID);
 
       global.GoatBot.onReply.set(msg.messageID, {
         type: "reply",
@@ -52,9 +52,9 @@ module.exports = {
 
     } catch (error) {
       if (error.response && error.response.status === 429) {
-        api.sendMessage("⚠️ 𝐒𝐞𝐫𝐯𝐞𝐫 𝐛𝐮𝐬𝐲, 𝐩𝐥𝐞𝐚𝐬𝐞 𝐰𝐚𝐢𝐭 𝐚 𝐟𝐞𝐰 𝐬𝐞𝐜𝐨𝐧𝐝𝐬 𝐚𝐧𝐝 𝐭𝐫𝐲 𝐚𝐠𝐚𝐢𝐧.", event.threadID, event.messageID);
+        api.sendMessage("⚠️ 𝐒𝐞𝐫𝐯𝐞𝐫 𝐛𝐮𝐬𝐲, 𝐩𝐥𝐞𝐚𝐬𝐞 𝐰𝐚𝐢𝐭 𝐚 𝐟𝐞𝐰 𝐬𝐞𝐜𝐨𝐧𝐝𝐬 𝐚𝐧𝐝 𝐭𝐫𝐲 𝐚𝐠𝐚𝐢𝐧.", event.threadID, undefined, event.messageID);
       } else {
-        api.sendMessage(`❌ 𝐄𝐫𝐫𝐨𝐫: ${error.message}`, event.threadID, event.messageID);
+        api.sendMessage(`❌ 𝐄𝐫𝐫𝐨𝐫: ${error.message}`, event.threadID, undefined, event.messageID);
       }
     }
   },
@@ -65,12 +65,12 @@ module.exports = {
     const { correctAnswer, author } = Reply;
 
     if (event.senderID !== author)
-      return api.sendMessage("🐸 𝐄𝐢 𝐪𝐮𝐢𝐳 𝐭𝐦𝐫 𝐧𝐚, 𝐜𝐡𝐮𝐝𝐥𝐢𝐧𝐠 𝐩𝐨𝐧𝐠!", event.threadID, event.messageID);
+      return api.sendMessage("🐸 𝐄𝐢 𝐪𝐮𝐢𝐳 𝐭𝐦𝐫 𝐧𝐚, 𝐜𝐡𝐮𝐝𝐥𝐢𝐧𝐠 𝐩𝐨𝐧𝐠!", event.threadID, undefined, event.messageID);
 
     const userReply = event.body.trim().toUpperCase();
 
     if (!["A","B","C","D"].includes(userReply))
-      return api.sendMessage("❌ 𝐑𝐞𝐩𝐥𝐲 𝐨𝐧𝐥𝐲 𝐀, 𝐁, 𝐂 𝐨𝐫 𝐃!", event.threadID, event.messageID);
+      return api.sendMessage("❌ 𝐑𝐞𝐩𝐥𝐲 𝐨𝐧𝐥𝐲 𝐀, 𝐁, 𝐂 𝐨𝐫 𝐃!", event.threadID, undefined, event.messageID);
 
     const userData = await usersData.get(author);
     const rewardCoins = 500;
@@ -91,14 +91,14 @@ module.exports = {
 🎁 +${rewardCoins} 𝐂𝐨𝐢𝐧𝐬
 ⭐ +${rewardExp} 𝐄𝐗𝐏`,
         event.threadID,
-        event.messageID
+        undefined, event.messageID
       );
     } else {
       return api.sendMessage(
         `❌ 𝐖𝐫𝐨𝐧𝐠 𝐀𝐧𝐬𝐰𝐞𝐫!
 ✔ 𝐑𝐢𝐠𝐡𝐭 𝐀𝐧𝐬𝐰𝐞𝐫: ${correctAnswer.toUpperCase()}`,
         event.threadID,
-        event.messageID
+        undefined, event.messageID
       );
     }
   }

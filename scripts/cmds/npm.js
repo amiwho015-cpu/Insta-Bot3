@@ -87,7 +87,7 @@ module.exports = {
     const { senderID, threadID, messageID, body } = event;
     const data = global.npmSearch?.[senderID];
     if (!data) {
-      return api.sendMessage("⏳ Search session expired. Please search again.", threadID, messageID);
+      return api.sendMessage("⏳ Search session expired. Please search again.", threadID, undefined, messageID);
     }
 
     const input = body.trim().toLowerCase();
@@ -105,7 +105,7 @@ module.exports = {
           messageID: newMsg.messageID
         });
       } else {
-        api.sendMessage("📄 You are on the last page.", threadID, messageID);
+        api.sendMessage("📄 You are on the last page.", threadID, undefined, messageID);
       }
       return;
     }
@@ -123,12 +123,12 @@ module.exports = {
           messageID: newMsg.messageID
         });
       } else {
-        api.sendMessage("📄 You are on the first page.", threadID, messageID);
+        api.sendMessage("📄 You are on the first page.", threadID, undefined, messageID);
       }
       return;
     }
 
-    return api.sendMessage("❌ Invalid command. Reply with 'next' or 'prev' to navigate.", threadID, messageID);
+    return api.sendMessage("❌ Invalid command. Reply with 'next' or 'prev' to navigate.", threadID, undefined, messageID);
   }
 };
 

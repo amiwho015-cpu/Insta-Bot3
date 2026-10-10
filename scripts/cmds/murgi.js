@@ -35,7 +35,7 @@ module.exports = {
     }
 
     if (!targetID) {
-      return api.sendMessage("❌ No target found.", threadID, messageID);
+      return api.sendMessage("❌ No target found.", threadID, undefined, messageID);
     }
 
     let userInfo;
@@ -43,12 +43,12 @@ module.exports = {
       userInfo = await api.getUserInfo(targetID);
     } catch (e) {
       console.error("Error fetching user info:", e);
-      return api.sendMessage("❌ Failed to fetch user info.", threadID, messageID);
+      return api.sendMessage("❌ Failed to fetch user info.", threadID, undefined, messageID);
     }
 
     const user = userInfo[targetID];
     if (!user) {
-      return api.sendMessage("❌ User not found.", threadID, messageID);
+      return api.sendMessage("❌ User not found.", threadID, undefined, messageID);
     }
 
     const name = user.name || "Unknown";
@@ -83,7 +83,7 @@ module.exports = {
     } catch (err) {
       console.error("Chicken generation error:", err);
       api.setMessageReaction("❌", messageID, () => {}, true);
-      return api.sendMessage(`❌ মুরগি বানাতে সমস্যা হয়েছে! Error: ${err.message || err}`, threadID, messageID);
+      return api.sendMessage(`❌ মুরগি বানাতে সমস্যা হয়েছে! Error: ${err.message || err}`, threadID, undefined, messageID);
     }
   }
 };
@@ -136,7 +136,7 @@ async function generateChickenImage(targetId) {
   const CACHE = join(__dirname, "cache");
   if (!existsSync(CACHE)) mkdirSync(CACHE, { recursive: true });
 
-  const avatarUrl = `https://graph.facebook.com/${targetId}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
+  const avatarUrl = (await global.utils.igAvatarUrl(targetId));
 
   let avatarBuf;
   try {

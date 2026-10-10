@@ -21,7 +21,7 @@ module.exports = {
         let mentionID = type === "message_reply" ? messageReply.senderID : 
                          Object.keys(mentions).length > 0 ? Object.keys(mentions)[0] : args[0];
 
-        if (!mentionID) return api.sendMessage("Please mention someone or reply to a message! 💍", threadID, messageID);
+        if (!mentionID) return api.sendMessage("Please mention someone or reply to a message! 💍", threadID, undefined, messageID);
 
         try {
             const [senderInfo, mentionInfo] = await Promise.all([
@@ -41,12 +41,12 @@ module.exports = {
                 sP = { x: 185, y: 310, r: 30 }; mP = { x: 335, y: 370, r: 30 };
             }
 
-            const getAvatar = (id) => `https://graph.facebook.com/${id}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
+            const getAvatar = async (id) => global.utils.igAvatarUrl(id);
 
             const [bgImg, avatarS, avatarM] = await Promise.all([
                 loadImage(bgUrl),
-                loadImage(getAvatar(senderID)),
-                loadImage(getAvatar(mentionID))
+                loadImage(await getAvatar(senderID)),
+                loadImage(await getAvatar(mentionID))
             ]);
 
             const canvas = createCanvas(bgImg.width, bgImg.height);
@@ -75,7 +75,7 @@ module.exports = {
             }, threadID, () => fs.unlinkSync(cachePath), messageID);
 
         } catch (e) {
-            return api.sendMessage("An error occurred. Please try again.", threadID, messageID);
+            return api.sendMessage("An error occurred. Please try again.", threadID, undefined, messageID);
         }
     }
 };

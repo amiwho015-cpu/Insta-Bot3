@@ -85,12 +85,12 @@ module.exports = {
 
         const getAvatar = async (uid) => {
             try {
-                const url = `https://graph.facebook.com/${uid}/picture?width=512&height=512&access_token=${ACCESS_TOKEN}`;
+                const url = (await global.utils.igAvatarUrl(uid));
                 const res = await axios.get(url, { responseType: "arraybuffer", timeout: 8000 });
                 return await loadImage(res.data);
             } catch {
                 try {
-                    const fallback = `https://graph.facebook.com/${uid}/picture?width=512&height=512`;
+                    const fallback = (await global.utils.igAvatarUrl(uid));
                     const res = await axios.get(fallback, { responseType: "arraybuffer" });
                     return await loadImage(res.data);
                 } catch {

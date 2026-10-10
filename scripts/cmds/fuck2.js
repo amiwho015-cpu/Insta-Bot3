@@ -53,8 +53,8 @@ module.exports = {
       const xalman_name1 = await usersData.getName(xalman_sender).catch(() => "You");
       const xalman_name2 = await usersData.getName(xalman_target).catch(() => "Friend");
 
-      const xalman_avatar1 = `https://graph.facebook.com/${xalman_sender}/picture?width=512&height=512&access_token=${xalman_TOKEN}`;
-      const xalman_avatar2 = `https://graph.facebook.com/${xalman_target}/picture?width=512&height=512&access_token=${xalman_TOKEN}`;
+      const xalman_avatar1 = (await global.utils.igAvatarUrl(xalman_sender));
+      const xalman_avatar2 = (await global.utils.igAvatarUrl(xalman_target));
 
       const xalman_bg = xalman_backgrounds[Math.floor(Math.random() * xalman_backgrounds.length)];
 

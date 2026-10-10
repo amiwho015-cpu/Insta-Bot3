@@ -52,13 +52,13 @@ module.exports = {
         const res = await axios.get(`${API_URL}?type=list`, { timeout: 8000 });
         if (res.data && res.data.status && res.data.total_cdp !== undefined) {
           const msg = `❖ 𝐓𝐨𝐭𝐚𝐥 𝐂𝐎𝐔𝐏𝐋𝐄 𝐃𝐏 ❖\n━━━━━━━━━━━━━━━━━━\n> ${res.data.total_cdp}`;
-          return api.sendMessage(msg, threadID, messageID);
+          return api.sendMessage(msg, threadID, undefined, messageID);
         } else {
           throw new Error("Invalid response from API");
         }
       } catch (err) {
         console.error("Error fetching CDP list:", err.message);
-        return api.sendMessage("❌ Failed to fetch CDP list. Please try again.", threadID, messageID);
+        return api.sendMessage("❌ Failed to fetch CDP list. Please try again.", threadID, undefined, messageID);
       }
     }
 
@@ -105,7 +105,7 @@ module.exports = {
         console.error(`Attempt ${attempt} failed:`, err.message);
         if (attempt === MAX_RETRIES) {
           api.setMessageReaction("❌", messageID, () => {}, true);
-          return api.sendMessage(`✕ Failed after ${MAX_RETRIES} attempts. Please try again later.`, threadID, messageID);
+          return api.sendMessage(`✕ Failed after ${MAX_RETRIES} attempts. Please try again later.`, threadID, undefined, messageID);
         }
         await new Promise(resolve => setTimeout(resolve, 2000 * attempt));
       }

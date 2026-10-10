@@ -50,17 +50,17 @@ module.exports = {
     if (!fs.existsSync(cacheDir)) fs.mkdirSync(cacheDir, { recursive: true });
 
     if (!messageReply || !messageReply.attachments || messageReply.attachments.length === 0) {
-      return api.sendMessage("❌ Please reply to an image.", threadID, messageID);
+      return api.sendMessage("❌ Please reply to an image.", threadID, undefined, messageID);
     }
 
     const attachment = messageReply.attachments[0];
     if (attachment.type !== "photo" && attachment.type !== "animated_image") {
-      return api.sendMessage("❌ Please reply to an image (photo).", threadID, messageID);
+      return api.sendMessage("❌ Please reply to an image (photo).", threadID, undefined, messageID);
     }
 
     const prompt = args.join(" ").trim();
     if (!prompt) {
-      return api.sendMessage("✨ Please enter a prompt!\nExample: /animate cinematic motion", threadID, messageID);
+      return api.sendMessage("✨ Please enter a prompt!\nExample: /animate cinematic motion", threadID, undefined, messageID);
     }
 
     const imageUrl = attachment.url;
@@ -128,6 +128,6 @@ module.exports = {
     }
 
     api.setMessageReaction("❌", messageID, () => {}, true);
-    return api.sendMessage("❌ Failed to animate image.", threadID, messageID);
+    return api.sendMessage("❌ Failed to animate image.", threadID, undefined, messageID);
   }
 };

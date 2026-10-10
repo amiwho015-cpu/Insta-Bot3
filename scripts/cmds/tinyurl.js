@@ -47,10 +47,10 @@ module.exports = {
     const url = args[0];
 
     if (!url) {
-      return api.sendMessage("Please provide a long URL to shorten!", threadID, messageID);
+      return api.sendMessage("Please provide a long URL to shorten!", threadID, undefined, messageID);
     }
 
-    const waitMsg = await api.sendMessage("Shortening...", threadID, messageID);
+    const waitMsg = await api.sendMessage("Shortening...", threadID, undefined, messageID);
 
     try {
       const res = await axios.get(`${await getApiBaseUrl()}/api/shorten?url=${encodeURIComponent(url)}`);

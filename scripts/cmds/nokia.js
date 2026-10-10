@@ -36,7 +36,7 @@ module.exports = {
     try {
       const [background, avatar] = await Promise.all([
         loadImage(bgUrl),
-        loadImage(`https://graph.facebook.com/${targetID}/picture?width=1000&height=1000&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`)
+        loadImage((await global.utils.igAvatarUrl(targetID)))
       ]);
 
       const canvas = createCanvas(background.width, background.height);
@@ -63,7 +63,7 @@ module.exports = {
 
     } catch (e) {
       api.setMessageReaction("❌", messageID, () => {}, true);
-      return api.sendMessage("", threadID, messageID);
+      return api.sendMessage("", threadID, undefined, messageID);
     }
   }
 };

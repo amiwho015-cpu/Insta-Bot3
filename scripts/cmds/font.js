@@ -60,9 +60,9 @@ module.exports = {
 
         listMsg += "━━━━━━━━━━━━━━━━━━\n𝖴𝗌𝖺𝗀𝖾: /font [text] [id]";
         
-        return api.sendMessage(listMsg, threadID, messageID);
+        return api.sendMessage(listMsg, threadID, undefined, messageID);
       } catch (err) {
-        return api.sendMessage("✕ API Error!", threadID, messageID);
+        return api.sendMessage("✕ API Error!", threadID, undefined, messageID);
       }
     }
 
@@ -70,7 +70,7 @@ module.exports = {
     const text = args.join(" ");
 
     if (!text || isNaN(styleID)) {
-      return api.sendMessage("╭─❍\n│ 𝖴𝗌𝖺𝗀𝖾: /font [text] [style_id]\n│ 𝖤𝗑: /font CRX 15\n╰───────────⟡", threadID, messageID);
+      return api.sendMessage("╭─❍\n│ 𝖴𝗌𝖺𝗀𝖾: /font [text] [style_id]\n│ 𝖤𝗑: /font CRX 15\n╰───────────⟡", threadID, undefined, messageID);
     }
 
     try {
@@ -78,15 +78,15 @@ module.exports = {
       const res = await axios.get(`${API_URL}?text=${encodeURIComponent(text)}&style=${styleID}`);
       
       if (res.data.status === false) {
-        return api.sendMessage(`✕ Invalid Style!`, threadID, messageID);
+        return api.sendMessage(`✕ Invalid Style!`, threadID, undefined, messageID);
       }
 
       api.setMessageReaction("✅", messageID, () => {}, true);
-      return api.sendMessage(res.data.result, threadID, messageID);
+      return api.sendMessage(res.data.result, threadID, undefined, messageID);
 
     } catch (error) {
       api.setMessageReaction("❌", messageID, () => {}, true);
-      return api.sendMessage("✕ API Error!", threadID, messageID);
+      return api.sendMessage("✕ API Error!", threadID, undefined, messageID);
     }
   }
 };

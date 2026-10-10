@@ -17,12 +17,12 @@ module.exports = {
     const { threadID, messageID, senderID } = event;
 
     if (!args[0]) {
-      return api.sendMessage("『 SYSTEM-ERROR 』\n\n➤ Please provide DOB (DD-MM-YYYY)\n➤ Example: .age 18-05-2006", threadID, messageID);
+      return api.sendMessage("『 SYSTEM-ERROR 』\n\n➤ Please provide DOB (DD-MM-YYYY)\n➤ Example: .age 18-05-2006", threadID, undefined, messageID);
     }
 
     const birthDate = moment.tz(args[0], "DD-MM-YYYY", true, "Asia/Dhaka");
     if (!birthDate.isValid()) {
-      return api.sendMessage("❌ FORMAT_INVALID: Use DD-MM-YYYY", threadID, messageID);
+      return api.sendMessage("❌ FORMAT_INVALID: Use DD-MM-YYYY", threadID, undefined, messageID);
     }
 
     const now = moment.tz("Asia/Dhaka");
@@ -56,6 +56,6 @@ module.exports = {
       `│ 🎖️ 𝗨𝘀𝗲𝗿 𝗥𝗮𝗻𝗸: ${randomRating}\n` +
       `└──────────────────\n` ;
 
-    return api.sendMessage(response, threadID, messageID);
+    return api.sendMessage(response, threadID, undefined, messageID);
   }
 };

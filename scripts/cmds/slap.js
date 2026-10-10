@@ -30,13 +30,7 @@ module.exports = {
     if (!uid2) return message.reply(getLang("noTag"));
 
     async function getFbProfilePic(userId, width = 512, height = 512) {
-      const url = `https://graph.facebook.com/${userId}/picture?width=${width}&height=${height}&access_token=${ACCESS_TOKEN}&redirect=false`;
-      try {
-        const res = await axios.get(url);
-        return res.data.data.url;
-      } catch {
-        return null;
-      }
+      return await global.utils.igAvatarUrl(userId);
     }
 
     let avatar1 = await getFbProfilePic(uid1) || await usersData.getAvatarUrl(uid1);

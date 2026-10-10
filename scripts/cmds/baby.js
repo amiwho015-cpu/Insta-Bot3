@@ -107,19 +107,19 @@ module.exports.onStart = async ({ api, event, args, usersData }) => {
                 if (handled) return;
             }
             const ran = [""];
-            return api.sendMessage(ran[Math.floor(Math.random() * ran.length)], event.threadID, event.messageID);
+            return api.sendMessage(ran[Math.floor(Math.random() * ran.length)], event.threadID, undefined, event.messageID);
         }
 
         if (args[0] === 'remove') {
             const key = body.replace("remove ", "");
             const data = await fetchWithFallback(`/baby?remove=${encodeURIComponent(key)}&senderID=${uid}`);
-            return api.sendMessage(data.message, event.threadID, event.messageID);
+            return api.sendMessage(data.message, event.threadID, undefined, event.messageID);
         }
 
         if (args[0] === 'rm' && body.includes('-')) {
             const [key, index] = body.replace("rm ", "").split(/\s*-\s*/);
             const data = await fetchWithFallback(`/baby?remove=${encodeURIComponent(key)}&index=${index}`);
-            return api.sendMessage(data.message, event.threadID, event.messageID);
+            return api.sendMessage(data.message, event.threadID, undefined, event.messageID);
         }
 
         if (args[0] === 'list') {
@@ -135,60 +135,60 @@ module.exports.onStart = async ({ api, event, args, usersData }) => {
                 }));
                 teachers.sort((a, b) => b.value - a.value);
                 const output = teachers.map((t, i) => `${i + 1}/ ${t.name}: ${t.value}`).join('\n');
-                return api.sendMessage(`Total Teach = ${data.length}\n👑 | List of Teachers of baby\n${output}`, event.threadID, event.messageID);
+                return api.sendMessage(`Total Teach = ${data.length}\n👑 | List of Teachers of baby\n${output}`, event.threadID, undefined, event.messageID);
             }
             const data = await fetchWithFallback(`/baby?list=all`);
-            return api.sendMessage(`❇️ | Total Teach = ${data.length || "api off"}\n♻️ | Total Response = ${data.responseLength || "api off"}`, event.threadID, event.messageID);
+            return api.sendMessage(`❇️ | Total Teach = ${data.length || "api off"}\n♻️ | Total Response = ${data.responseLength || "api off"}`, event.threadID, undefined, event.messageID);
         }
 
         if (args[0] === 'msg') {
             const key = body.replace("msg ", "");
             const data = await fetchWithFallback(`/baby?list=${encodeURIComponent(key)}`);
-            return api.sendMessage(`Message ${key} = ${data.data}`, event.threadID, event.messageID);
+            return api.sendMessage(`Message ${key} = ${data.data}`, event.threadID, undefined, event.messageID);
         }
 
         if (args[0] === 'edit') {
             const parts = body.replace("edit ", "").split(/\s*-\s*/);
             if (parts.length < 2)
-                return api.sendMessage('❌ | Invalid format! Use: edit [YourMessage] - [NewReply]', event.threadID, event.messageID);
+                return api.sendMessage('❌ | Invalid format! Use: edit [YourMessage] - [NewReply]', event.threadID, undefined, event.messageID);
             const data = await fetchWithFallback(`/baby?edit=${encodeURIComponent(parts[0])}&replace=${encodeURIComponent(parts[1])}&senderID=${uid}`);
-            return api.sendMessage(`changed ${data.message}`, event.threadID, event.messageID);
+            return api.sendMessage(`changed ${data.message}`, event.threadID, undefined, event.messageID);
         }
 
         if (args[0] === 'teach' && args[1] === 'sticker') {
             const reply = body.replace("teach sticker ", "").replace(/^-\s*/, "").trim();
-            if (!reply) return api.sendMessage('❌ | Invalid format! Use: teach sticker - [Reply1], [Reply2]...', event.threadID, event.messageID);
+            if (!reply) return api.sendMessage('❌ | Invalid format! Use: teach sticker - [Reply1], [Reply2]...', event.threadID, undefined, event.messageID);
             const data = normalize((await axios.get(`${SECONDARY_API}/baby/sticker?teach=1&reply=${encodeURIComponent(reply)}&senderID=${uid}`, { timeout: 10000 })).data || {});
-            return api.sendMessage(`✅ ${data.message}`, event.threadID, event.messageID);
+            return api.sendMessage(`✅ ${data.message}`, event.threadID, undefined, event.messageID);
         }
 
         if (args[0] === 'teach' && args[1] === 'picture') {
             const reply = body.replace("teach picture ", "").replace(/^-\s*/, "").trim();
-            if (!reply) return api.sendMessage('❌ | Invalid format! Use: teach picture - [Reply1], [Reply2]...', event.threadID, event.messageID);
+            if (!reply) return api.sendMessage('❌ | Invalid format! Use: teach picture - [Reply1], [Reply2]...', event.threadID, undefined, event.messageID);
             const data = normalize((await axios.get(`${SECONDARY_API}/baby/picture?teach=1&reply=${encodeURIComponent(reply)}&senderID=${uid}`, { timeout: 10000 })).data || {});
-            return api.sendMessage(`✅ ${data.message}`, event.threadID, event.messageID);
+            return api.sendMessage(`✅ ${data.message}`, event.threadID, undefined, event.messageID);
         }
 
         if (args[0] === 'teach' && args[1] === 'react') {
             const parts = body.replace("teach react ", "").split(/\s*-\s*/);
             if (parts.length < 2)
-                return api.sendMessage('❌ | Invalid format! Use: teach react [YourMessage] - ❤️, 😀', event.threadID, event.messageID);
+                return api.sendMessage('❌ | Invalid format! Use: teach react [YourMessage] - ❤️, 😀', event.threadID, undefined, event.messageID);
             const data = await fetchWithFallback(`/baby?teach=${encodeURIComponent(parts[0])}&react=${encodeURIComponent(parts[1])}`);
-            return api.sendMessage(`✅ Reacts added: ${data.message}`, event.threadID, event.messageID);
+            return api.sendMessage(`✅ Reacts added: ${data.message}`, event.threadID, undefined, event.messageID);
         }
 
         if (args[0] === 'teach' && args[1] === 'amar') {
             const parts = body.replace("teach amar ", "").split(/\s*-\s*/);
             if (parts.length < 2)
-                return api.sendMessage('❌ | Invalid format! Use: teach amar [YourMessage] - [reply]', event.threadID, event.messageID);
+                return api.sendMessage('❌ | Invalid format! Use: teach amar [YourMessage] - [reply]', event.threadID, undefined, event.messageID);
             const data = await fetchWithFallback(`/baby?teach=${encodeURIComponent(parts[0])}&senderID=${uid}&reply=${encodeURIComponent(parts[1])}&key=intro`);
-            return api.sendMessage(`✅ Intro reply added: ${data.message}`, event.threadID, event.messageID);
+            return api.sendMessage(`✅ Intro reply added: ${data.message}`, event.threadID, undefined, event.messageID);
         }
 
         if (args[0] === 'teach') {
             const parts = body.replace("teach ", "").split(/\s*-\s*/);
             if (parts.length < 2 || parts[1].length < 2)
-                return api.sendMessage('❌ | Invalid format! Use: teach [YourMessage] - [Reply1], [Reply2]', event.threadID, event.messageID);
+                return api.sendMessage('❌ | Invalid format! Use: teach [YourMessage] - [Reply1], [Reply2]', event.threadID, undefined, event.messageID);
             const data = await fetchWithFallback(`/baby?teach=${encodeURIComponent(parts[0])}&reply=${encodeURIComponent(parts[1])}&senderID=${uid}&threadID=${event.threadID}`);
             let teacherName = "Unknown";
             try {
@@ -197,12 +197,12 @@ module.exports.onStart = async ({ api, event, args, usersData }) => {
                 teacherName = await usersData.getName(uid).catch(() => "Unknown");
             }
             const outputMessage = utils.monospace(`✅ Replies added: ${data.message}\n👤 Teacher: ${teacherName}\n📚 Total Teachs: ${data.teachs}`);
-            return api.sendMessage(outputMessage, event.threadID, event.messageID);
+            return api.sendMessage(outputMessage, event.threadID, undefined, event.messageID);
         }
 
         if (["amar name ki", "amr nam ki", "amar nam ki", "amr name ki", "whats my name"].some(p => body.includes(p))) {
             const data = await fetchWithFallback(`/baby?text=amar name ki&senderID=${uid}&key=intro`);
-            return api.sendMessage(data.reply, event.threadID, event.messageID);
+            return api.sendMessage(data.reply, event.threadID, undefined, event.messageID);
         }
 
         const data = await fetchWithFallback(`/baby?text=${encodeURIComponent(body)}&senderID=${uid}&threadID=${event.threadID}&font=1`);
@@ -218,7 +218,7 @@ module.exports.onStart = async ({ api, event, args, usersData }) => {
 
     } catch (e) {
         console.log(e);
-        api.sendMessage("Check console for error", event.threadID, event.messageID);
+        api.sendMessage("Check console for error", event.threadID, undefined, event.messageID);
     }
 };
 
@@ -242,7 +242,7 @@ module.exports.onReply = async ({ api, event }) => {
             });
         }, event.messageID);
     } catch (err) {
-        return api.sendMessage(`Error: ${err.message}`, event.threadID, event.messageID);
+        return api.sendMessage(`Error: ${err.message}`, event.threadID, undefined, event.messageID);
     }
 };
 

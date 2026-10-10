@@ -50,10 +50,10 @@ module.exports = {
     if (type === "message_reply" && messageReply.attachments[0]?.type === "photo") {
       imageUrl = messageReply.attachments[0].url;
     } else {
-      return api.sendMessage("╭─❍\n│ Please reply to an image!\n╰───────────⟡", threadID, messageID);
+      return api.sendMessage("╭─❍\n│ Please reply to an image!\n╰───────────⟡", threadID, undefined, messageID);
     }
 
-    const waitMsg = await api.sendMessage("Uploading to FreeImage...", threadID, messageID);
+    const waitMsg = await api.sendMessage("Uploading to FreeImage...", threadID, undefined, messageID);
 
     try {
       const res = await axios.get(`${API_URL}?url=${encodeURIComponent(imageUrl)}`);

@@ -74,7 +74,7 @@ module.exports = {
             return api.sendMessage(
                 "✨ Please enter a prompt!\n━━━━━━━━━━━━━━━━━━━━\nExample: /flux a futuristic city\nOptional: /flux a cat --ratio 16:9",
                 threadID,
-                messageID
+                undefined, messageID
             );
         }
 
@@ -114,7 +114,7 @@ module.exports = {
         } catch (error) {
             console.error(error);
             api.setMessageReaction("❌", messageID, (err) => {}, true);
-            return api.sendMessage(`⚠️ Generation Failed! ${error.message}`, threadID, messageID);
+            return api.sendMessage(`⚠️ Generation Failed! ${error.message}`, threadID, undefined, messageID);
         }
     }
 };

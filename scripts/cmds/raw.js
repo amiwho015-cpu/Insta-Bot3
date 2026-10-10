@@ -64,13 +64,13 @@ module.exports = {
           return api.sendMessage(
             `File not found: ${fileName}\n\nDid you mean:\n- ${suggestions.join("\n- ")}`,
             threadID,
-            messageID
+            undefined, messageID
           );
         }
         return api.sendMessage(
           `File not found: ${fileName}\n\nAvailable files:\n- ${files.join("\n- ")}`,
           threadID,
-          messageID
+          undefined, messageID
         );
       }
       contentToUpload = fs.readFileSync(filePath, "utf8");
@@ -80,12 +80,12 @@ module.exports = {
       return api.sendMessage(
         "Please provide a file name or reply to a message.\nExample: /raw kill.js\nExample: /raw (reply to any message)",
         threadID,
-        messageID
+        undefined, messageID
       );
     }
 
     if (!contentToUpload) {
-      return api.sendMessage("❌ No content to upload.", threadID, messageID);
+      return api.sendMessage("❌ No content to upload.", threadID, undefined, messageID);
     }
 
     try {
@@ -99,7 +99,7 @@ module.exports = {
         return api.sendMessage(
           `${fileType}: ${displayName}\n🔗 ${rawUrl}`,
           threadID,
-          messageID
+          undefined, messageID
         );
       } else {
         throw new Error("Invalid response from API");
@@ -109,7 +109,7 @@ module.exports = {
       return api.sendMessage(
         "❌ Failed to upload. Please try again later.",
         threadID,
-        messageID
+        undefined, messageID
       );
     }
   }

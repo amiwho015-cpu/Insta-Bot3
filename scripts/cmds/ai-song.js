@@ -78,7 +78,7 @@ module.exports = {
 
 Type {pn} help for full guide.`,
         threadID,
-        messageID
+        undefined, messageID
       );
     }
 
@@ -86,7 +86,7 @@ Type {pn} help for full guide.`,
       return api.sendMessage(
         this.config.guide.en.replace(/\{pn\}/g, "ai-song"),
         threadID,
-        messageID
+        undefined, messageID
       );
     }
 
@@ -101,7 +101,7 @@ Type {pn} help for full guide.`,
     const prompt = input.replace(/--d\s+\d+/i, "").trim();
 
     if (!prompt) {
-      return api.sendMessage("❌ Please provide a song prompt.", threadID, messageID);
+      return api.sendMessage("❌ Please provide a song prompt.", threadID, undefined, messageID);
     }
 
     const cacheDir = path.join(__dirname, "cache");
@@ -187,7 +187,7 @@ Type {pn} help for full guide.`,
       return api.sendMessage(
         `❌ AI Song Generation Failed\n\n⚠️ ${error.message || "Unknown API error"}\n\nPlease try again.`,
         threadID,
-        messageID
+        undefined, messageID
       );
     }
   }

@@ -121,7 +121,7 @@ module.exports = {
 
     } catch (error) {
       console.error("Stats command error:", error);
-      return api.sendMessage("❌ Error: Unable to fetch bot stats.", event.threadID, event.messageID);
+      return api.sendMessage("❌ Error: Unable to fetch bot stats.", event.threadID, undefined, event.messageID);
     }
   }
 };

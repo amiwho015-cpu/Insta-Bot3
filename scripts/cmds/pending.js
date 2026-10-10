@@ -35,7 +35,7 @@ module.exports = {
 
       for (const n of nums) {
         if (!Number(n) || n < 1 || n > Reply.queue.length)
-          return api.sendMessage(getLang("invalid", n), threadID, messageID);
+          return api.sendMessage(getLang("invalid", n), threadID, undefined, messageID);
 
         const targetThreadID = Reply.queue[n - 1].threadID;
 
@@ -63,14 +63,14 @@ module.exports = {
       return api.sendMessage(
         getLang("refused", done),
         threadID,
-        messageID
+        undefined, messageID
       );
     }
 
     const nums = input.split(/\s+/);
     for (const n of nums) {
       if (!Number(n) || n < 1 || n > Reply.queue.length)
-        return api.sendMessage(getLang("invalid", n), threadID, messageID);
+        return api.sendMessage(getLang("invalid", n), threadID, undefined, messageID);
 
       const targetThreadID = Reply.queue[n - 1].threadID;
       const botID = api.getCurrentUserID();
@@ -95,7 +95,7 @@ module.exports = {
     return api.sendMessage(
       getLang("approved", done),
       threadID,
-      messageID
+      undefined, messageID
     );
   },
 
@@ -113,7 +113,7 @@ module.exports = {
       );
 
       if (!groups.length)
-        return api.sendMessage(getLang("empty"), threadID, messageID);
+        return api.sendMessage(getLang("empty"), threadID, undefined, messageID);
 
       for (const g of groups)
         text += `• ${i++}. ${g.name || "Unnamed Group"} → ${g.threadID}\n`;
@@ -132,7 +132,7 @@ module.exports = {
       );
 
     } catch (err) {
-      return api.sendMessage(getLang("fetchFail"), threadID, messageID);
+      return api.sendMessage(getLang("fetchFail"), threadID, undefined, messageID);
     }
   }
 };

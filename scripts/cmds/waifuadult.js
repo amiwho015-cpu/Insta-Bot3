@@ -68,7 +68,7 @@ module.exports = {
       api.sendMessage(
         "Error fetching image.",
         event.threadID,
-        event.messageID
+        undefined, event.messageID
       );
     }
   }

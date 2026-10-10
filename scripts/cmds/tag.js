@@ -36,14 +36,14 @@ module.exports = {
         tagUsers = members;
       } else {
         if (!args[0]) {
-          return api.sendMessage("⚠️ Mention user or reply.", threadID, messageID);
+          return api.sendMessage("⚠️ Mention user or reply.", threadID, undefined, messageID);
         }
 
         const searchName = args[0].toLowerCase();
         tagUsers = members.filter(m => m.name.toLowerCase().includes(searchName));
 
         if (tagUsers.length === 0) {
-          return api.sendMessage("❌ User Not Found", threadID, messageID);
+          return api.sendMessage("❌ User Not Found", threadID, undefined, messageID);
         }
       }
 
@@ -70,11 +70,11 @@ module.exports = {
       return api.sendMessage(
         { body, mentions },
         threadID,
-        messageReply ? messageReply.messageID : messageID
+        undefined, messageReply ? messageReply.messageID : messageID
       );
 
     } catch (err) {
-      return api.sendMessage("❌ Error: " + err.message, threadID, messageID);
+      return api.sendMessage("❌ Error: " + err.message, threadID, undefined, messageID);
     }
   }
 };

@@ -51,7 +51,7 @@ module.exports = {
     if (type === "message_reply" && messageReply.attachments[0]?.type === "photo") {
       imageUrl = messageReply.attachments[0].url;
     } else {
-      return api.sendMessage("╭─❍\n│ 𝖯𝗅𝖾𝖺𝗌𝖾 𝗋𝖾𝗉𝗅𝗒 𝗍𝗈 𝖺𝗇 𝗂𝗆𝖺𝗀𝖾!\n╰───────────⟡", threadID, messageID);
+      return api.sendMessage("╭─❍\n│ 𝖯𝗅𝖾𝖺𝗌𝖾 𝗋𝖾𝗉𝗅𝗒 𝗍𝗈 𝖺𝗇 𝗂𝗆𝖺𝗀𝖾!\n╰───────────⟡", threadID, undefined, messageID);
     }
 
     api.setMessageReaction("⏳", messageID, () => {}, true);
@@ -68,12 +68,12 @@ module.exports = {
       return api.sendMessage({
         body: "❖ 𝗕𝗔𝗖𝗞𝗚𝗥𝗢𝗨𝗡𝗗 𝗥𝗘𝗠𝗢𝗩𝗘𝗥 ❖\n━━━━━━━━━━━━━━━━━━",
         attachment: response.data
-      }, threadID, messageID);
+      }, threadID, undefined, messageID);
 
     } catch (error) {
       console.error(error);
       api.setMessageReaction("❌", messageID, () => {}, true);
-      return api.sendMessage("✕ Failed to remove background!", threadID, messageID);
+      return api.sendMessage("✕ Failed to remove background!", threadID, undefined, messageID);
     }
   }
 };

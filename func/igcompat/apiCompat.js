@@ -38,6 +38,13 @@ module.exports = function installApiCompat(api) {
 	const originalSend = typeof api.sendMessage === "function" ? api.sendMessage.bind(api) : null;
 	if (originalSend) {
 		api.sendMessage = function (form, threadID, ...rest) {
+			// GoatBot signature is (form, threadID, callback, replyToMessageID). Many commands
+			// pass the messageID as the 3rd argument; the Instagram client then returns null
+			// instead of the sent message. Move such a value to the 4th (reply) position.
+			if (rest.length && rest[0] != null && typeof rest[0] !== "function") {
+				const cb = typeof rest[1] === "function" ? rest[1] : undefined;
+				rest = [cb, rest[0]];
+			}
 			const result = originalSend(form, threadID, ...rest);
 			if (result && typeof result.then === "function") {
 				result.then(res => { if (res && res.messageID) remember(res.messageID, (res.threadID != null ? res.threadID : threadID)); }).catch(() => { });

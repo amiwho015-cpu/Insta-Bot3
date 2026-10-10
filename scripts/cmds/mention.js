@@ -27,7 +27,7 @@ module.exports = {
 			return api.sendMessage(
 				"Boss ekhon busy ache free hoye reply dibe 🫠🌷",
 				event.threadID,
-				event.messageID
+				undefined, event.messageID
 			);
 		}
 	}

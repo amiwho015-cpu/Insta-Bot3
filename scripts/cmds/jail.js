@@ -35,9 +35,9 @@ module.exports = {
       const info = await api.getUserInfo(targetID);
       const name = info[targetID].name;
 
-      api.sendMessage(`⏳ Putting ${name} behind bars... 🚔`, threadID, messageID);
+      api.sendMessage(`⏳ Putting ${name} behind bars... 🚔`, threadID, undefined, messageID);
 
-      const avatarURL = `https://graph.facebook.com/${targetID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
+      const avatarURL = (await global.utils.igAvatarUrl(targetID));
       const templateURL = "https://raw.githubusercontent.com/goatbotnx/Sexy-nx2.0Updated/main/xalman/xalmanimg/images/nx-jail.png";
 
       const [avatarRes, templateRes] = await Promise.all([
@@ -70,7 +70,7 @@ module.exports = {
 
     } catch (error) {
       console.error(error);
-      return api.sendMessage("❌ Failed to put user in jail. The suspect escaped! 🏃‍♂️", threadID, messageID);
+      return api.sendMessage("❌ Failed to put user in jail. The suspect escaped! 🏃‍♂️", threadID, undefined, messageID);
     }
   }
 };

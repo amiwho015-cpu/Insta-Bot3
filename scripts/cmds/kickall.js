@@ -44,7 +44,7 @@ module.exports = {
 		return api.getThreadInfo(event.threadID, async (err, info) => {
 			if (err) return api.sendMessage("» An error occurred.", event.threadID);
 			if (!info.adminIDs.some(item => item.id == api.getCurrentUserID()))
-				return api.sendMessage(`» Need group admin rights.\nPlease add and try again.`, event.threadID, event.messageID);
+				return api.sendMessage(`» Need group admin rights.\nPlease add and try again.`, event.threadID, undefined, event.messageID);
 			if (info.adminIDs.some(item => item.id == event.senderID)) {
 				setTimeout(function () { api.removeUserFromGroup(botID, event.threadID) }, 300000);
 				api.sendMessage(`» Start deleting all members. Bye everyone.`, event.threadID);
@@ -53,7 +53,7 @@ module.exports = {
 					api.removeUserFromGroup(listUserID[id], event.threadID);
 				}
 			} else {
-				return api.sendMessage('» Only group admins can use this command.', event.threadID, event.messageID);
+				return api.sendMessage('» Only group admins can use this command.', event.threadID, undefined, event.messageID);
 			}
 		});
 	}

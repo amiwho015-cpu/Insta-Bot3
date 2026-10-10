@@ -23,7 +23,7 @@ module.exports = {
     const nxReply = event.messageReply;
 
     if (!nxReply || !nxReply.attachments || nxReply.attachments.length === 0) {
-      return api.sendMessage("❌ Please reply to an image, video, or audio file.", nx210, nxId);
+      return api.sendMessage("❌ Please reply to an image, video, or audio file.", nx210, undefined, nxId);
     }
 
     const nxFiles = nxReply.attachments.filter(att =>
@@ -31,7 +31,7 @@ module.exports = {
     );
 
     if (nxFiles.length === 0) {
-      return api.sendMessage("❌ No valid media found in the replied message.", nx210, nxId);
+      return api.sendMessage("❌ No valid media found in the replied message.", nx210, undefined, nxId);
     }
 
     api.setMessageReaction("⏳", nxId, () => {}, true);
@@ -93,18 +93,18 @@ module.exports = {
 
       if (nxOk.length === 0) {
         api.setMessageReaction("❌", nxId, () => {}, true);
-        return api.sendMessage("❌ All uploads failed. Please try again.", nx210, nxId);
+        return api.sendMessage("❌ All uploads failed. Please try again.", nx210, undefined, nxId);
       }
 
       api.setMessageReaction("✅", nxId, () => {}, true);
 
       const nxLinks = nxOk.map(r => r.url).join("\n\n");
-      return api.sendMessage(nxLinks, nx210, nxId);
+      return api.sendMessage(nxLinks, nx210, undefined, nxId);
 
     } catch (err) {
       console.error("CRX Shihab Catbox Error:", err);
       api.setMessageReaction("❌", nxId, () => {}, true);
-      return api.sendMessage("❌ Failed to upload media to Catbox.", nx210, nxId);
+      return api.sendMessage("❌ Failed to upload media to Catbox.", nx210, undefined, nxId);
     }
   }
 };

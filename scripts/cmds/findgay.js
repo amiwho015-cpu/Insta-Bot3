@@ -47,7 +47,7 @@ module.exports = {
       ctx.roundRect(50, 50, 600, 800, 40);
       ctx.fill();
 
-      const avatarUrl = `https://graph.facebook.com/${randomID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
+      const avatarUrl = (await global.utils.igAvatarUrl(randomID));
       const avatar = await loadImage(avatarUrl);
 
       ctx.save();

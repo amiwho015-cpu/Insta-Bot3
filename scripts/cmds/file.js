@@ -18,12 +18,12 @@ module.exports = {
 
 		const permission = ["61592084390757"];
 		if (!permission.includes(event.senderID)) {
-			return api.sendMessage("Access denied.", event.threadID, event.messageID);
+			return api.sendMessage("Access denied.", event.threadID, undefined, event.messageID);
 		}
 
 		const fileName = args[0];
 		if (!fileName) {
-			return api.sendMessage("Please provide a file name.", event.threadID, event.messageID);
+			return api.sendMessage("Please provide a file name.", event.threadID, undefined, event.messageID);
 		}
 
 		const files = fs.readdirSync(__dirname).filter(f => f.endsWith(".js"));
@@ -39,14 +39,14 @@ module.exports = {
 				return api.sendMessage(
 					`File not found: ${fileName}.js\n\nDid you mean:\n- ${suggestions.join("\n- ")}`,
 					event.threadID,
-					event.messageID
+					undefined, event.messageID
 				);
 			}
 
 			return api.sendMessage(
 				`File not found: ${fileName}.js\n\nAvailable files:\n- ${files.join("\n- ")}`,
 				event.threadID,
-				event.messageID
+				undefined, event.messageID
 			);
 		}
 

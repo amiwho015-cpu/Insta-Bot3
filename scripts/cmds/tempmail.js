@@ -57,7 +57,7 @@ module.exports = {
           "━━━━━━━━━━━━━━━━━━\n" +
           "➜ tm gen : Generate Mail\n" +
           "➜ tm check <email> : Check Inbox";
-        return api.sendMessage(helpMsg, threadID, messageID);
+        return api.sendMessage(helpMsg, threadID, undefined, messageID);
       }
 
       if (action === "gen") {
@@ -68,7 +68,7 @@ module.exports = {
 
           if (!data.status || !data.email) {
             api.unsendMessage(waitMsg.messageID);
-            return api.sendMessage("❌ API is currently busy. Try again.", threadID, messageID);
+            return api.sendMessage("❌ API is currently busy. Try again.", threadID, undefined, messageID);
           }
 
           const successMsg = 
@@ -80,17 +80,17 @@ module.exports = {
             `Type: tm check ${data.email}`;
 
           api.unsendMessage(waitMsg.messageID);
-          return api.sendMessage(successMsg, threadID, messageID);
+          return api.sendMessage(successMsg, threadID, undefined, messageID);
         } catch (e) {
           api.unsendMessage(waitMsg.messageID);
-          return api.sendMessage("❌ Connection failed with API server.", threadID, messageID);
+          return api.sendMessage("❌ Connection failed with API server.", threadID, undefined, messageID);
         }
       }
 
       if (action === "check") {
         const email = args[1];
         if (!email) {
-          return api.sendMessage("⚠️ Please provide an email! \nExample: tm check abc@domain.com", threadID, messageID);
+          return api.sendMessage("⚠️ Please provide an email! \nExample: tm check abc@domain.com", threadID, undefined, messageID);
         }
 
         const waitCheck = await api.sendMessage(`🔄 Syncing inbox: ${email}...`, threadID);
@@ -100,7 +100,7 @@ module.exports = {
 
           if (!data.status || !data.messages || data.messages.length === 0) {
             api.unsendMessage(waitCheck.messageID);
-            return api.sendMessage(`📭 Inbox empty or expired: \n${email}`, threadID, messageID);
+            return api.sendMessage(`📭 Inbox empty or expired: \n${email}`, threadID, undefined, messageID);
           }
 
           let inboxText = `📩 𝗜𝗡𝗕𝗢𝗫: ${email}\n📬 𝗧𝗼𝘁𝗮𝗹 𝗠𝗮𝗶𝗹𝘀: ${data.total_messages}\n`;
@@ -120,19 +120,19 @@ module.exports = {
           });
 
           api.unsendMessage(waitCheck.messageID);
-          return api.sendMessage(inboxText, threadID, messageID);
+          return api.sendMessage(inboxText, threadID, undefined, messageID);
 
         } catch (e) {
           api.unsendMessage(waitCheck.messageID);
-          return api.sendMessage("❌ Error syncing inbox. Verify the email.", threadID, messageID);
+          return api.sendMessage("❌ Error syncing inbox. Verify the email.", threadID, undefined, messageID);
         }
       }
 
-      return api.sendMessage("⚠️ Invalid usage! Use 'tm gen' or 'tm check'.", threadID, messageID);
+      return api.sendMessage("⚠️ Invalid usage! Use 'tm gen' or 'tm check'.", threadID, undefined, messageID);
 
     } catch (err) {
       console.error("TM PRO ERROR:", err);
-      return api.sendMessage("❌ System encountered an internal error.", threadID, messageID);
+      return api.sendMessage("❌ System encountered an internal error.", threadID, undefined, messageID);
     }
   }
 };

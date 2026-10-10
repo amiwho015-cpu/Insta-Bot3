@@ -45,11 +45,11 @@ module.exports = {
     const { threadID, messageID, messageReply } = event;
 
     if (!messageReply || !messageReply.attachments || messageReply.attachments.length === 0) {
-      return api.sendMessage("❌ Please reply to a photo, video, or GIF.", threadID, messageID);
+      return api.sendMessage("❌ Please reply to a photo, video, or GIF.", threadID, undefined, messageID);
     }
 
     const mediaUrls = messageReply.attachments.map(att => att.url);
-    const waitMsg = await api.sendMessage(`⏳ Uploading ${mediaUrls.length} file(s)...`, threadID, messageID);
+    const waitMsg = await api.sendMessage(`⏳ Uploading ${mediaUrls.length} file(s)...`, threadID, undefined, messageID);
 
     try {
       const results = await Promise.all(

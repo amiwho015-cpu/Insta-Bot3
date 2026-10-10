@@ -48,7 +48,7 @@ module.exports = {
 
     const username = args[0];
     if (!username) {
-      return api.sendMessage("╭─❍\n│ Usage: {pn} [username]\n╰───────────⟡", threadID, messageID);
+      return api.sendMessage("╭─❍\n│ Usage: {pn} [username]\n╰───────────⟡", threadID, undefined, messageID);
     }
 
     api.setMessageReaction("🔍", messageID, () => {}, true);
@@ -74,14 +74,14 @@ module.exports = {
         return api.sendMessage({
           body: info,
           attachment: avatarStream
-        }, threadID, messageID);
+        }, threadID, undefined, messageID);
       } else {
         throw new Error("User not found");
       }
 
     } catch (error) {
       api.setMessageReaction("❌", messageID, () => {}, true);
-      return api.sendMessage("✕ TikTok user not found or API error!", threadID, messageID);
+      return api.sendMessage("✕ TikTok user not found or API error!", threadID, undefined, messageID);
     }
   }
 };

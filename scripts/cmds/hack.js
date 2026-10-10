@@ -36,7 +36,7 @@ module.exports = {
 
       api.setMessageReaction("⏳", messageID, () => {}, true);
 
-      const avatarUrl = `https://graph.facebook.com/${targetID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
+      const avatarUrl = (await global.utils.igAvatarUrl(targetID));
       const templateUrl = "https://i.ibb.co/LXNX3QRW/2b38355a3b01.jpg";
 
       const [avatarBuf, templateBuf] = await Promise.all([

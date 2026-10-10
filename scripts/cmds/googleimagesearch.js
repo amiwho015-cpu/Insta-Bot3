@@ -48,7 +48,7 @@ module.exports = {
 
   onStart: async function ({ api, event, args }) {
     const query = args.join(" ");
-    if (!query) return api.sendMessage("Please enter a search query!", event.threadID, event.messageID);
+    if (!query) return api.sendMessage("Please enter a search query!", event.threadID, undefined, event.messageID);
 
     try {
       const waitMsg = await api.sendMessage(`Creating 21 image grid for "${query}"...`, event.threadID);
@@ -184,7 +184,7 @@ module.exports = {
       return api.sendMessage({
         body: `📸 Image ${num} Original Quality:`,
         attachment: stream
-      }, event.threadID, event.messageID);
+      }, event.threadID, undefined, event.messageID);
     } catch (e) {
       return api.sendMessage("Failed to download original image.", event.threadID);
     }

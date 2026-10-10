@@ -42,12 +42,11 @@ module.exports = {
         usersData.getName(targetID).catch(() => "Friend")
       ]);
 
-      const getAvatar = (id) =>
-        `https://graph.facebook.com/${id}/picture?width=512&height=512&access_token=${authToken}`;
+      const getAvatar = async (id) => global.utils.igAvatarUrl(id);
 
       const [avatarA, avatarB, background] = await Promise.all([
-        loadImage(getAvatar(senderID)),
-        loadImage(getAvatar(targetID)),
+        loadImage(await getAvatar(senderID)),
+        loadImage(await getAvatar(targetID)),
         loadImage(bgPool[Math.floor(Math.random() * bgPool.length)])
       ]);
 

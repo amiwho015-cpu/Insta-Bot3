@@ -58,7 +58,7 @@ module.exports = {
       try {
         ({ me, partner } = await pickPartner(usersData, String(targetID), members, wanted));
       } catch (e) {
-        if (e.friendly) return api.sendMessage("⚠️ " + e.message, threadID, messageID);
+        if (e.friendly) return api.sendMessage("⚠️ " + e.message, threadID, undefined, messageID);
         throw e;
       }
       const senderGender = me.gender;
@@ -205,7 +205,7 @@ ${genderEmoji1} ${senderName} ✦ ${genderEmoji2} ${partner.name}
 
     } catch (err) {
       console.error(err);
-      return api.sendMessage("❌ | Pair system failed! Please try again.", threadID, messageID);
+      return api.sendMessage("❌ | Pair system failed! Please try again.", threadID, undefined, messageID);
     }
   }
 };

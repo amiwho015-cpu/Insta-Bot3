@@ -35,8 +35,8 @@ module.exports = {
             message.reply("Please wait, the masterpiece is loading... ⏳🐶");
 
             const bgUrl = "https://i.imgur.com/7LzQpW2.jpeg";
-            const avatar1Url = `https://graph.facebook.com/${senderID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
-            const avatar2Url = `https://graph.facebook.com/${targetID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
+            const avatar1Url = (await global.utils.igAvatarUrl(senderID));
+            const avatar2Url = (await global.utils.igAvatarUrl(targetID));
 
             const bgImage = await loadImage(bgUrl);
             const av1 = await loadImage(avatar1Url);

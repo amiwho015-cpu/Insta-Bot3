@@ -54,7 +54,7 @@ module.exports = {
       imageUrl = args[0];
     } 
     else {
-      return api.sendMessage("Please reply to an image or provide a link!", threadID, messageID);
+      return api.sendMessage("Please reply to an image or provide a link!", threadID, undefined, messageID);
     }
 
     try {
@@ -70,12 +70,12 @@ module.exports = {
       return api.sendMessage({
         body: "✨𝙝𝙚𝙧𝙚 𝙞𝙨 𝙮𝙤𝙪𝙧 𝙪𝙣𝙗𝙡𝙪𝙧 𝙞𝙢𝙖𝙜𝙚✨",
         attachment: response.data
-      }, threadID, messageID);
+      }, threadID, undefined, messageID);
 
     } catch (error) {
       console.error(error);
       api.setMessageReaction("❌", messageID, () => {}, true);
-      return api.sendMessage("✕ API Error!", threadID, messageID);
+      return api.sendMessage("✕ API Error!", threadID, undefined, messageID);
     }
   }
 };

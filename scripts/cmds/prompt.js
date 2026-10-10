@@ -50,7 +50,7 @@ module.exports = {
       return api.sendMessage(
         "❌ Please reply to an image to generate a prompt.",
         threadID,
-        messageID
+        undefined, messageID
       );
     }
 
@@ -62,7 +62,7 @@ module.exports = {
       return api.sendMessage(
         "❌ Please reply to a valid image.",
         threadID,
-        messageID
+        undefined, messageID
       );
     }
 
@@ -93,7 +93,7 @@ module.exports = {
 
       const msg = `🖼️ 𝗜𝗠𝗔𝗚𝗘 𝗣𝗥𝗢𝗠𝗣𝗧\n━━━━━━━━━━━━━━━━━━\n${prompt}`;
 
-      return api.sendMessage(msg, threadID, messageID);
+      return api.sendMessage(msg, threadID, undefined, messageID);
 
     } catch (error) {
       console.error("Prompt Error:", error.message);
@@ -101,7 +101,7 @@ module.exports = {
       return api.sendMessage(
         "❌ Failed to analyze the image. Please try again.",
         threadID,
-        messageID
+        undefined, messageID
       );
     }
   }

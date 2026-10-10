@@ -32,7 +32,7 @@ module.exports = {
 			const totalPages = Math.ceil(filteredList.length / limit);
 
 			if (page > totalPages || page < 1) {
-				return api.sendMessage(`Invalid page! Please choose between 1 and ${totalPages}`, event.threadID, event.messageID);
+				return api.sendMessage(`Invalid page! Please choose between 1 and ${totalPages}`, event.threadID, undefined, event.messageID);
 			}
 
 			const msg = getPageMessage(filteredList, page, limit, totalPages);
@@ -66,7 +66,7 @@ module.exports = {
 		if (action === "left" || action === "out") {
 			const indexes = args.slice(1).map(n => parseInt(n)).filter(n => !isNaN(n));
 			if (indexes.length === 0) {
-				return api.sendMessage("Please provide group number(s). Example: left 1 or left 1 2 3", event.threadID, event.messageID);
+				return api.sendMessage("Please provide group number(s). Example: left 1 or left 1 2 3", event.threadID, undefined, event.messageID);
 			}
 
 			let leftCount = 0;
@@ -82,18 +82,18 @@ module.exports = {
 					}
 				}
 			}
-			return api.sendMessage(`Left ${leftCount} group(s) successfully.`, event.threadID, event.messageID);
+			return api.sendMessage(`Left ${leftCount} group(s) successfully.`, event.threadID, undefined, event.messageID);
 		}
 
 		if (action === "join") {
 			const index = parseInt(args[1]);
 			if (isNaN(index)) {
-				return api.sendMessage("Please provide a group number. Example: join 1", event.threadID, event.messageID);
+				return api.sendMessage("Please provide a group number. Example: join 1", event.threadID, undefined, event.messageID);
 			}
 
 			const groupIndex = (page - 1) * limit + (index - 1);
 			if (groupIndex < 0 || groupIndex >= allGroups.length) {
-				return api.sendMessage("Invalid group number!", event.threadID, event.messageID);
+				return api.sendMessage("Invalid group number!", event.threadID, undefined, event.messageID);
 			}
 
 			const targetGroup = allGroups[groupIndex];
@@ -104,13 +104,13 @@ module.exports = {
 				await api.addUserToGroup(event.senderID, targetGroup.threadID);
 
 				if (threadInfo.approvalMode) {
-					return api.sendMessage(`The group's approval feature is on. The admin will approve you. You are on the pending list.`, event.threadID, event.messageID);
+					return api.sendMessage(`The group's approval feature is on. The admin will approve you. You are on the pending list.`, event.threadID, undefined, event.messageID);
 				} else {
-					return api.sendMessage(`You have been added to "${targetName}"!`, event.threadID, event.messageID);
+					return api.sendMessage(`You have been added to "${targetName}"!`, event.threadID, undefined, event.messageID);
 				}
 			} catch (err) {
 				console.error("Join error:", err);
-				return api.sendMessage(`Failed to add you to "${targetName}". Please check your privacy settings or bot permissions.`, event.threadID, event.messageID);
+				return api.sendMessage(`Failed to add you to "${targetName}". Please check your privacy settings or bot permissions.`, event.threadID, undefined, event.messageID);
 			}
 		}
 
@@ -126,7 +126,7 @@ module.exports = {
 		}
 
 		if (newPage > totalPages || newPage < 1) {
-			return api.sendMessage(`Invalid page! Please choose between 1 and ${totalPages}`, event.threadID, event.messageID);
+			return api.sendMessage(`Invalid page! Please choose between 1 and ${totalPages}`, event.threadID, undefined, event.messageID);
 		}
 
 		const msg = getPageMessage(allGroups, newPage, limit, totalPages);

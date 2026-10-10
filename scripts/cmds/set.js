@@ -24,7 +24,7 @@ module.exports = {
       return api.sendMessage(
         "🚫 Access denied.",
         event.threadID,
-        event.messageID
+        undefined, event.messageID
       );
     }
 

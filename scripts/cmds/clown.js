@@ -36,7 +36,7 @@ module.exports = {
 
       api.setMessageReaction("⏳", messageID, () => {}, true);
 
-      const avatarUrl = `https://graph.facebook.com/${targetID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
+      const avatarUrl = (await global.utils.igAvatarUrl(targetID));
       const templateUrl = "https://i.imgur.com/v8hgsSH.jpeg";
 
       const userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";

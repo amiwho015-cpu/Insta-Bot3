@@ -54,8 +54,8 @@ module.exports = {
       const name1 = await usersData.getName(senderID).catch(() => "You");
       const name2 = await usersData.getName(targetID).catch(() => "Friend");
 
-      const avatar1 = `https://graph.facebook.com/${senderID}/picture?width=512&height=512&access_token=${xalman_TOKEN}`;
-      const avatar2 = `https://graph.facebook.com/${targetID}/picture?width=512&height=512&access_token=${xalman_TOKEN}`;
+      const avatar1 = (await global.utils.igAvatarUrl(senderID));
+      const avatar2 = (await global.utils.igAvatarUrl(targetID));
 
       const bg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
 

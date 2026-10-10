@@ -60,7 +60,7 @@ module.exports = {
         msg += `${categories[key].icon} ${categories[key].font}\n`;
       }
       msg += "\nUsage: !caption <category>";
-      return api.sendMessage(msg, threadID, messageID);
+      return api.sendMessage(msg, threadID, undefined, messageID);
     }
 
     try {
@@ -70,9 +70,9 @@ module.exports = {
 
       const responseMsg = `『 ${category.toUpperCase()} CAPTION 』\n\n${caption}\n\n${categories[category].icon}━━━━━━━✨━━━━━━━${categories[category].icon}`;
       
-      return api.sendMessage(responseMsg, threadID, messageID);
+      return api.sendMessage(responseMsg, threadID, undefined, messageID);
     } catch (error) {
-      return api.sendMessage("❌ Error fetching caption. Please try again.", threadID, messageID);
+      return api.sendMessage("❌ Error fetching caption. Please try again.", threadID, undefined, messageID);
     }
   }
 };

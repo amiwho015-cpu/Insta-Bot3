@@ -53,10 +53,10 @@ module.exports = {
                     `🐾 𝗖𝗔𝗧 𝗗𝗔𝗧𝗔𝗕𝗔𝗦𝗘 𝗜𝗡𝗙𝗢\n━━━━━━━━━━━━━━━━━━\n` +
                     `Total Images: ${info.data.total_images}\n` +
                     `Status: Active`, 
-                    threadID, messageID
+                    threadID, undefined, messageID
                 );
             } catch (e) {
-                return api.sendMessage("✕ Could not fetch the cat image list.", threadID, messageID);
+                return api.sendMessage("✕ Could not fetch the cat image list.", threadID, undefined, messageID);
             }
         }
 
@@ -75,12 +75,12 @@ module.exports = {
             return api.sendMessage({
                 body: "❖ 𝗖𝗨𝗧𝗘 𝗖𝗔𝗧 ❖\n━━━━━━━━━━━━━━━━━━",
                 attachment: imageStream.data
-            }, threadID, messageID);
+            }, threadID, undefined, messageID);
 
         } catch (error) {
             console.error(error);
             api.setMessageReaction("❌", messageID, () => {}, true);
-            return api.sendMessage("✕ Failed to load the cat image!", threadID, messageID);
+            return api.sendMessage("✕ Failed to load the cat image!", threadID, undefined, messageID);
         }
     }
 };

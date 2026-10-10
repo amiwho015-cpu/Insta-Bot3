@@ -25,7 +25,7 @@ module.exports = {
       return api.sendMessage(
         "❌ | You are not authorized to change the author name.",
         event.threadID,
-        event.messageID
+        undefined, event.messageID
       );
     }
 

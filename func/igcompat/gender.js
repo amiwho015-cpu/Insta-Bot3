@@ -59,14 +59,23 @@ async function pickPartner(usersData, targetID, members, wanted) {
 	let myGender = wanted === "boy" ? 1 : wanted === "girl" ? 2 : me.gender;
 	const opposite = myGender === 1 ? 2 : myGender === 2 ? 1 : 0;
 
-	if (!myGender) {
-		const err = new Error("I can't tell your gender. Use `gender boy` or `gender girl` once, then try again.");
+	const meInfo = { id: targetID, name: me.name || "User", gender: myGender };
+	if (!pool.length) {
+		const err = new Error("No other members found in this group to pair with.");
 		err.friendly = true; throw err;
 	}
-	const exact = pool.filter(p => p.gender === opposite);
-	if (exact.length) return { me: { id: targetID, name: me.name || "User", gender: myGender }, partner: exact[0] };
+	// own gender unknown -> pair with anyone in the group
+	if (!myGender) return { me: meInfo, partner: pool[0] };
 
-	const err = new Error(`No ${opposite === 2 ? "girl" : "boy"} could be identified in this group. Members can tag themselves with \`gender ${opposite === 2 ? "girl" : "boy"}\` (admins can reply to someone's message with it).`);
+	// 1) best: a member known to be of the opposite gender
+	const exact = pool.filter(p => p.gender === opposite);
+	if (exact.length) return { me: meInfo, partner: exact[0] };
+
+	// 2) otherwise: a member whose gender is unknown (never the same known gender)
+	const unknown = pool.filter(p => p.gender === 0);
+	if (unknown.length) return { me: meInfo, partner: unknown[0] };
+
+	const err = new Error(`No ${opposite === 2 ? "girl" : "boy"} found in this group.`);
 	err.friendly = true; throw err;
 }
 

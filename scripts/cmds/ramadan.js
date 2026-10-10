@@ -46,10 +46,10 @@ module.exports = {
 
 May Allah accept your fasts. 🤲`;
 
-      return api.sendMessage(infoMsg, threadID, messageID);
+      return api.sendMessage(infoMsg, threadID, undefined, messageID);
 
     } catch (error) {
-      return api.sendMessage(`❌ Information for '${city}' not found. Please type the city name correctly in English (e.g., !ramadan Dhaka)`, threadID, messageID);
+      return api.sendMessage(`❌ Information for '${city}' not found. Please type the city name correctly in English (e.g., !ramadan Dhaka)`, threadID, undefined, messageID);
     }
   }
 };

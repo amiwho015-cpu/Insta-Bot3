@@ -53,7 +53,7 @@ module.exports = {
       return api.sendMessage(
         `╭──〔 YOUTUBE DOWNLOADER 〕──╮\n│\n├─ 🎥 ${this.config.name} -v believer\n├─ 🎵 ${this.config.name} -a believer\n├─ 🔗 ${this.config.name} <youtube link>\n│\n╰──────────────────╯`,
         threadID,
-        messageID
+        undefined, messageID
       );
     }
     const input = args.join(" ");
@@ -66,14 +66,14 @@ module.exports = {
     if (args[0] === "-a") mode = "audio";
     const query = args[0].startsWith("-") ? args.slice(1).join(" ") : args.join(" ");
     if (!query) {
-      return api.sendMessage("❌ Please enter search query", threadID, messageID);
+      return api.sendMessage("❌ Please enter search query", threadID, undefined, messageID);
     }
     api.setMessageReaction("🔍", messageID, () => {}, true);
     try {
       const res = await axios.get(`${await getApiBaseUrl()}/api/ytsearch?q=${encodeURIComponent(query)}`);
       if (!res.data.status || !res.data.results || !res.data.results.length) {
         api.setMessageReaction("❌", messageID, () => {}, true);
-        return api.sendMessage("❌ No result found", threadID, messageID);
+        return api.sendMessage("❌ No result found", threadID, undefined, messageID);
       }
       const results = res.data.results;
       const searchQuery = res.data.search_query || query;
@@ -90,7 +90,7 @@ module.exports = {
     } catch (e) {
       console.log(e);
       api.setMessageReaction("❌", messageID, () => {}, true);
-      api.sendMessage("❌ Search failed", threadID, messageID);
+      api.sendMessage("❌ Search failed", threadID, undefined, messageID);
     }
   },
 
@@ -98,14 +98,14 @@ module.exports = {
     const { threadID, messageID, body, senderID } = event;
     if (senderID != Reply.author) return;
     const data = global.ytbSearch?.[senderID];
-    if (!data) return api.sendMessage("⚠️ Search session expired. Please search again.", threadID, messageID);
+    if (!data) return api.sendMessage("⚠️ Search session expired. Please search again.", threadID, undefined, messageID);
     const lower = body.toLowerCase().trim();
     if (lower === "next" || lower === "n") {
       if (data.currentPage < data.totalPages) {
         data.currentPage++;
         await sendSearchPage(api, threadID, senderID, data.currentPage);
       } else {
-        api.sendMessage("📄 You are on the last page.", threadID, messageID);
+        api.sendMessage("📄 You are on the last page.", threadID, undefined, messageID);
       }
       return;
     }
@@ -114,18 +114,18 @@ module.exports = {
         data.currentPage--;
         await sendSearchPage(api, threadID, senderID, data.currentPage);
       } else {
-        api.sendMessage("📄 You are on the first page.", threadID, messageID);
+        api.sendMessage("📄 You are on the first page.", threadID, undefined, messageID);
       }
       return;
     }
     const num = parseInt(body);
     if (isNaN(num) || num < 1 || num > 5) {
-      return api.sendMessage("❌ Invalid number. Choose 1-5, or type 'next'/'prev'.", threadID, messageID);
+      return api.sendMessage("❌ Invalid number. Choose 1-5, or type 'next'/'prev'.", threadID, undefined, messageID);
     }
     const pageStart = (data.currentPage - 1) * 5;
     const index = pageStart + num - 1;
     if (index >= data.results.length) {
-      return api.sendMessage("❌ That result doesn't exist.", threadID, messageID);
+      return api.sendMessage("❌ That result doesn't exist.", threadID, undefined, messageID);
     }
     const video = data.results[index];
     try {
@@ -185,7 +185,7 @@ async function downloadMedia(api, threadID, messageID, url, mode) {
       if (waitMsg?.messageID) {
         try { await api.unsendMessage(waitMsg.messageID, threadID); } catch {}
       }
-      return api.sendMessage("❌ Download failed", threadID, messageID);
+      return api.sendMessage("❌ Download failed", threadID, undefined, messageID);
     }
 
     const mediaUrl = data.url;
@@ -231,7 +231,7 @@ async function downloadMedia(api, threadID, messageID, url, mode) {
       if (fs.existsSync(filePath)) {
         try { fs.unlinkSync(filePath); } catch {}
       }
-      api.sendMessage("❌ Download failed", threadID, messageID);
+      api.sendMessage("❌ Download failed", threadID, undefined, messageID);
     });
   } catch (err) {
     console.log(err);
@@ -239,6 +239,6 @@ async function downloadMedia(api, threadID, messageID, url, mode) {
     if (waitMsg?.messageID) {
       try { await api.unsendMessage(waitMsg.messageID, threadID); } catch {}
     }
-    api.sendMessage("❌ Download failed", threadID, messageID);
+    api.sendMessage("❌ Download failed", threadID, undefined, messageID);
   }
 }

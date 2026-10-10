@@ -54,12 +54,12 @@ module.exports = {
       messageReply.attachments.length === 0 ||
       messageReply.attachments[0].type !== "photo"
     ) {
-      return api.sendMessage("⚠️ | Please reply to an image to start editing.", threadID, messageID);
+      return api.sendMessage("⚠️ | Please reply to an image to start editing.", threadID, undefined, messageID);
     }
 
     const prompt = args.join(" ");
     if (!prompt) {
-      return api.sendMessage("📝 | Please provide a prompt for editing.\nExample: {pn} change background to space", threadID, messageID);
+      return api.sendMessage("📝 | Please provide a prompt for editing.\nExample: {pn} change background to space", threadID, undefined, messageID);
     }
 
     const imageUrl = encodeURIComponent(messageReply.attachments[0].url);
@@ -102,7 +102,7 @@ module.exports = {
         ? "⏱️ | Request Timeout: Server took more than 2 minutes." 
         : "🚫 | API Error: Could not edit image.";
 
-      api.sendMessage(errorMsg, threadID, messageID);
+      api.sendMessage(errorMsg, threadID, undefined, messageID);
       if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
     }
   }

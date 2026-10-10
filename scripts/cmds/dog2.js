@@ -43,7 +43,7 @@ module.exports = {
             const name = userInfo[targetID].name;
 
             const dogImgUrl = "https://i.ibb.co/DDMySDsS/a5f597724c71.jpg"; 
-            const avatarUrl = `https://graph.facebook.com/${targetID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
+            const avatarUrl = (await global.utils.igAvatarUrl(targetID));
 
             const [dogImg, avatarImg] = await Promise.all([
                 loadImage(dogImgUrl),
@@ -77,7 +77,7 @@ module.exports = {
             }, messageID);
 
         } catch (e) {
-            return api.sendMessage("Error executing command ❌", threadID, messageID);
+            return api.sendMessage("Error executing command ❌", threadID, undefined, messageID);
         }
     }
 };

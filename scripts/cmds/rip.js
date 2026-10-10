@@ -26,7 +26,7 @@ module.exports = {
     } else if (args.length > 0 && !isNaN(args[0])) {
       mentionID = args[0];
     } else {
-      return api.sendMessage("Please mention a user, reply to a message, or provide a UID.", event.threadID, event.messageID);
+      return api.sendMessage("Please mention a user, reply to a message, or provide a UID.", event.threadID, undefined, event.messageID);
     }
 
     const senderID = event.senderID;
@@ -41,8 +41,8 @@ module.exports = {
 
       let senderName = "Someone";
       let mentionName = "Someone";
-      let senderAvatarUrl = `https://graph.facebook.com/${senderID}/picture?width=512&height=512`;
-      let mentionAvatarUrl = `https://graph.facebook.com/${mentionID}/picture?width=512&height=512`;
+      let senderAvatarUrl = (await global.utils.igAvatarUrl(senderID));
+      let mentionAvatarUrl = (await global.utils.igAvatarUrl(mentionID));
 
       try {
         const userInfo = await api.getUserInfo([senderID, mentionID]);
@@ -63,7 +63,7 @@ module.exports = {
           const res = await axios.get(url, { responseType: "arraybuffer", headers: { "User-Agent": "Mozilla/5.0" } });
           return Buffer.from(res.data, "utf-8");
         } catch (err) {
-          const fallback = await axios.get(`https://graph.facebook.com/${senderID}/picture?width=512&height=512`, { responseType: "arraybuffer" });
+          const fallback = await axios.get((await global.utils.igAvatarUrl(senderID)), { responseType: "arraybuffer" });
           return Buffer.from(fallback.data, "utf-8");
         }
       };
@@ -118,7 +118,7 @@ module.exports = {
 
     } catch (error) {
       console.error("FULL ERROR LOG:", error);
-      return api.sendMessage(`System Error: ${error.message}`, event.threadID, event.messageID);
+      return api.sendMessage(`System Error: ${error.message}`, event.threadID, undefined, event.messageID);
     }
   }
 };

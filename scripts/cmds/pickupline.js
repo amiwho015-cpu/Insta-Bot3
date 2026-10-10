@@ -307,14 +307,14 @@ module.exports = {
 
     if (input === "bangla") {
       const line = banglaLines[Math.floor(Math.random() * banglaLines.length)];
-      return api.sendMessage(`✨ [Bangla Pickupline] ✨\n\n${line}`, event.threadID, event.messageID);
+      return api.sendMessage(`✨ [Bangla Pickupline] ✨\n\n${line}`, event.threadID, undefined, event.messageID);
     } 
     
     if (input === "english") {
       const line = englishLines[Math.floor(Math.random() * englishLines.length)];
-      return api.sendMessage(`💖 [English Pickupline] 💖\n\n${line}`, event.threadID, event.messageID);
+      return api.sendMessage(`💖 [English Pickupline] 💖\n\n${line}`, event.threadID, undefined, event.messageID);
     }
 
-    return api.sendMessage("⚠️ Please use:\n/pickupline bangla\nOR\n/pickupline english", event.threadID, event.messageID);
+    return api.sendMessage("⚠️ Please use:\n/pickupline bangla\nOR\n/pickupline english", event.threadID, undefined, event.messageID);
   }
 };

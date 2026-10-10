@@ -22,7 +22,7 @@ module.exports = {
       return api.sendMessage(
         "❌ Please specify a file name to delete.\nExample: /de kill",
         threadID,
-        messageID
+        undefined, messageID
       );
     }
 
@@ -37,7 +37,7 @@ module.exports = {
       return api.sendMessage(
         `🗑️ 𝗙𝗶𝗹𝗲 𝗗𝗲𝗹𝗲𝘁𝗲𝗱\n━━━━━━━━━━━━━━━━━━━━\n📄 ${cleanName}\n✅ Successfully removed from the system.`,
         threadID,
-        messageID
+        undefined, messageID
       );
     } catch (error) {
       if (error.code === "ENOENT") {
@@ -59,14 +59,14 @@ module.exports = {
           }
         }
 
-        return api.sendMessage(reply, threadID, messageID);
+        return api.sendMessage(reply, threadID, undefined, messageID);
       }
 
       console.error("Deletion error:", error);
       return api.sendMessage(
         `⚠️ 𝗘𝗿𝗿𝗼𝗿\n━━━━━━━━━━━━━━━━━━━━\nUnable to delete ${cleanName}.\nReason: ${error.message}`,
         threadID,
-        messageID
+        undefined, messageID
       );
     }
   }

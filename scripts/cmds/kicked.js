@@ -32,13 +32,7 @@ module.exports = {
     if (!uid2) return message.reply("Please mention a user or reply to a message to kick! 🦵");
 
     async function getFbProfilePic(userId) {
-      const url = `https://graph.facebook.com/${userId}/picture?width=512&height=512&access_token=${ACCESS_TOKEN}&redirect=false`;
-      try {
-        const res = await axios.get(url);
-        return res.data.data.url;
-      } catch {
-        return `https://graph.facebook.com/${userId}/picture?width=512&height=512`;
-      }
+      return await global.utils.igAvatarUrl(userId);
     }
 
     function drawCircleAvatar(ctx, img, x, y, size) {

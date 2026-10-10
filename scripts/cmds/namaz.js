@@ -48,10 +48,10 @@ module.exports = {
 
 "Perform prayer, for it restrains from shameful and unjust deeds." 🤲`;
 
-      return api.sendMessage(infoMsg, threadID, messageID);
+      return api.sendMessage(infoMsg, threadID, undefined, messageID);
 
     } catch (error) {
-      return api.sendMessage(`❌ Information for '${city}' not found. Please type the city name correctly in English (e.g., !prayer Dhaka)`, threadID, messageID);
+      return api.sendMessage(`❌ Information for '${city}' not found. Please type the city name correctly in English (e.g., !prayer Dhaka)`, threadID, undefined, messageID);
     }
   }
 };

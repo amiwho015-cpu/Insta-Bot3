@@ -52,7 +52,7 @@ module.exports = {
       return api.sendMessage(
         "❌ Please reply to an audio or video file to identify the song.\nExample: /shazam (reply to a video/audio)",
         threadID,
-        messageID
+        undefined, messageID
       );
     }
 
@@ -63,7 +63,7 @@ module.exports = {
       return api.sendMessage(
         "❌ Please reply to an audio or video file only.",
         threadID,
-        messageID
+        undefined, messageID
       );
     }
 
@@ -111,19 +111,19 @@ module.exports = {
         } catch (thumbError) {
           console.error("Thumbnail download error:", thumbError);
           api.setMessageReaction("✅", messageID, () => {}, true);
-          return api.sendMessage(msg, threadID, messageID);
+          return api.sendMessage(msg, threadID, undefined, messageID);
         }
       }
 
       api.setMessageReaction("✅", messageID, () => {}, true);
-      return api.sendMessage(msg, threadID, messageID);
+      return api.sendMessage(msg, threadID, undefined, messageID);
     } catch (error) {
       console.error("Shazam error:", error);
       api.setMessageReaction("❌", messageID, () => {}, true);
       return api.sendMessage(
         "❌ Failed to identify the song. Please make sure the audio/video is clear and try again.",
         threadID,
-        messageID
+        undefined, messageID
       );
     }
   },

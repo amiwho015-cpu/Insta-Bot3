@@ -53,7 +53,7 @@ module.exports = {
       return api.sendMessage(
         "✨ Please enter a prompt!\nExample: /dalle cat in space",
         threadID,
-        messageID
+        undefined, messageID
       );
     }
 
@@ -134,7 +134,7 @@ module.exports = {
     } catch (error) {
       console.error("DALL-E error:", error.message);
       api.setMessageReaction("❌", messageID, () => {}, true);
-      return api.sendMessage("❌ Failed to generate image. Please try again.", threadID, messageID);
+      return api.sendMessage("❌ Failed to generate image. Please try again.", threadID, undefined, messageID);
     }
   }
 };

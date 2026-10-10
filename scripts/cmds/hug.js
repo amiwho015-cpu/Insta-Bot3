@@ -28,11 +28,11 @@ module.exports = {
         } else if (args[0] && !isNaN(args[0])) {
             targetID = args[0];
         } else {
-            return api.sendMessage("Oops! You forgot to mention someone. Please mention, reply, or provide a UID to send a hug! 🤗", threadID, messageID);
+            return api.sendMessage("Oops! You forgot to mention someone. Please mention, reply, or provide a UID to send a hug! 🤗", threadID, undefined, messageID);
         }
 
         try {
-            api.sendMessage("Sending a warm hug... Please wait! 🫂✨", threadID, messageID);
+            api.sendMessage("Sending a warm hug... Please wait! 🫂✨", threadID, undefined, messageID);
 
             const senderInfo = await usersData.get(senderID);
             const targetInfo = await usersData.get(targetID);
@@ -47,8 +47,8 @@ module.exports = {
             const senderGender = senderInfo.gender; 
 
             const backgroundUrl = "https://i.imgur.com/WyIZ7Zk.jpeg";
-            const avatarSenderUrl = `https://graph.facebook.com/${senderID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
-            const avatarTargetUrl = `https://graph.facebook.com/${targetID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
+            const avatarSenderUrl = (await global.utils.igAvatarUrl(senderID));
+            const avatarTargetUrl = (await global.utils.igAvatarUrl(targetID));
 
             const [bgImg, avatarSender, avatarTarget] = await Promise.all([
                 loadImage(backgroundUrl),
@@ -105,7 +105,7 @@ module.exports = {
 
         } catch (error) {
             console.error("Canvas/Hug Error:", error);
-            return api.sendMessage("Oh no! Couldn't send the hug due to an error. 💔 Check the console.", threadID, messageID);
+            return api.sendMessage("Oh no! Couldn't send the hug due to an error. 💔 Check the console.", threadID, undefined, messageID);
         }
     }
 };

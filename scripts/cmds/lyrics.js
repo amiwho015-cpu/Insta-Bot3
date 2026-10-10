@@ -47,10 +47,10 @@ module.exports = {
     const songName = args.join(" ");
 
     if (!songName) {
-      return api.sendMessage("╭─❍\n│ Please provide a song name!\n╰───────────⟡", threadID, messageID);
+      return api.sendMessage("╭─❍\n│ Please provide a song name!\n╰───────────⟡", threadID, undefined, messageID);
     }
 
-    const waitMsg = await api.sendMessage(`🔍 | Searching lyrics for: ${songName}...`, threadID, messageID);
+    const waitMsg = await api.sendMessage(`🔍 | Searching lyrics for: ${songName}...`, threadID, undefined, messageID);
 
     try {
       const res = await axios.get(`${await getApiBaseUrl()}/api/lyrics?song=${encodeURIComponent(songName)}`);

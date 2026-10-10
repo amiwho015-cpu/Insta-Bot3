@@ -65,13 +65,13 @@ module.exports = {
 ✨ ${data.total_cdp}
 ╰━━━〔 💖 〕━━━╯`,
           threadID,
-          messageID
+          undefined, messageID
         );
       } catch {
         return api.sendMessage(
           "❌ | Failed to fetch Couple DP list.",
           threadID,
-          messageID
+          undefined, messageID
         );
       }
     }
@@ -130,7 +130,7 @@ module.exports = {
           return api.sendMessage(
             "❌ | Failed to fetch matching Couple DP.\nPlease try again later.",
             threadID,
-            messageID
+            undefined, messageID
           );
         }
 

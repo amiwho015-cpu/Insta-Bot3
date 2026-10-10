@@ -9,7 +9,7 @@
 module.exports = {
 	config: {
 		name: "unsend",
-		aliases: ["uns"],
+		aliases: ["uns", "unsendmsg"],
 		version: "2.0",
 		author: "Neoaz 🐊",
 		countDown: 1,
@@ -32,20 +32,25 @@ module.exports = {
 
 	onStart: async function ({ api, event, message, getLang }) {
 		const replied = event.messageReply;
-		if (!replied || !replied.messageID)
+		if (!replied)
 			return message.reply(getLang("syntaxError"));
 
-		try {
-			await api.unsendMessage(replied.messageID, event.threadID);
-		}
-		catch (_) {
-			// last resort: the message helper tries the same thing once more
+		const ids = [...new Set([replied.messageID, replied.id, replied.itemID, replied.item_id, replied.mid]
+			.filter(v => v != null && v !== "").map(String))];
+		if (!ids.length)
+			return message.reply(getLang("syntaxError"));
+
+		let lastError;
+		for (const id of ids) {
 			try {
-				await message.unsend(replied.messageID);
+				await api.unsendMessage(id, event.threadID);
+				return;
 			}
-			catch (__) {
-				return message.reply(getLang("failed"));
+			catch (err) {
+				lastError = err;
 			}
 		}
+		console.log("[unsend] could not unsend", ids.join(","), "-", lastError && (lastError.message || lastError));
+		return message.reply(getLang("failed"));
 	}
 };

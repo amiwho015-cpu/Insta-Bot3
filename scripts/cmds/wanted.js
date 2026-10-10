@@ -36,9 +36,9 @@ module.exports = {
       const info = await api.getUserInfo(targetID);
       const name = info[targetID].name;
 
-      api.sendMessage(``, threadID, messageID);
+      api.sendMessage(``, threadID, undefined, messageID);
 
-      const avatarURL = `https://graph.facebook.com/${targetID}/picture?width=512&height=512&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
+      const avatarURL = (await global.utils.igAvatarUrl(targetID));
       
       const avatarRes = await axios.get(avatarURL, { responseType: 'arraybuffer' });
       const avatarBuffer = Buffer.from(avatarRes.data, 'utf-8');
@@ -60,7 +60,7 @@ module.exports = {
 
     } catch (error) {
       console.error(error);
-      return api.sendMessage("Wanted poster error ❌", threadID, messageID);
+      return api.sendMessage("Wanted poster error ❌", threadID, undefined, messageID);
     }
   }
 };
