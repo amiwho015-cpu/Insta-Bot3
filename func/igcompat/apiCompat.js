@@ -30,6 +30,27 @@ function attempt(fn, args, timeoutMs) {
 	});
 }
 
+
+/** names of functions on the client that look like "remove a message" (safe ones only) */
+function unsendLikeMethods(api) {
+	const names = new Set();
+	let o = api;
+	while (o && o !== Object.prototype) {
+		for (const n of Object.getOwnPropertyNames(o)) names.add(n);
+		o = Object.getPrototypeOf(o);
+	}
+	return [...names].filter(n => { try { return typeof api[n] === "function" && /^(unsend|retract|removeMessage|deleteMessage|removeItem|deleteItem)/i.test(n); } catch (_) { return false; } });
+}
+function apiMethodHints(api) {
+	const names = new Set();
+	let o = api;
+	while (o && o !== Object.prototype) {
+		for (const n of Object.getOwnPropertyNames(o)) names.add(n);
+		o = Object.getPrototypeOf(o);
+	}
+	return [...names].filter(n => { try { return typeof api[n] === "function" && /unsend|delet|remov|retract/i.test(n); } catch (_) { return false; } });
+}
+
 module.exports = function installApiCompat(api) {
 	if (!api || api.__igCompatInstalled) return api;
 	api.__igCompatInstalled = true;
@@ -68,15 +89,36 @@ module.exports = function installApiCompat(api) {
 		}
 		forms.push([String(messageID)]);                   // (messageID, cb)
 
-		let lastError;
+		const errors = [];
 		for (const args of forms) {
 			try {
 				const result = await attempt(rawUnsend, args);
 				if (typeof callback === "function") callback(null, result);
 				return result;
 			}
-			catch (error) { lastError = error; }
+			catch (error) {
+				const text = error && (error.message || error.error || (typeof error === "string" ? error : JSON.stringify(error)));
+				errors.push(`(${args.length} args) ${String(text).slice(0, 160)}`);
+			}
 		}
+		// last resort: other unsend-like methods the Instagram client may expose
+		for (const name of unsendLikeMethods(api)) {
+			if (name === "unsendMessage") continue;
+			const fn = api[name].bind(api);
+			const combos = threadID != null ? [[String(messageID), threadID], [threadID, String(messageID)]] : [[String(messageID)]];
+			for (const args of combos) {
+				try {
+					const result = await attempt(fn, args);
+					if (typeof callback === "function") callback(null, result);
+					return result;
+				}
+				catch (error) {
+					errors.push(`${name}: ${String((error && error.message) || error).slice(0, 120)}`);
+				}
+			}
+		}
+		const lastError = new Error(errors.join(" | ") || "unsend failed");
+		lastError.attempts = errors;
 		if (typeof callback === "function") { callback(lastError); return; }
 		throw lastError;
 	};
@@ -113,3 +155,4 @@ module.exports = function installApiCompat(api) {
 	return api;
 };
 module.exports.remember = remember;
+module.exports.apiMethodHints = apiMethodHints;

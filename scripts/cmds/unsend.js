@@ -51,6 +51,8 @@ module.exports = {
 			}
 		}
 		console.log("[unsend] could not unsend", ids.join(","), "-", lastError && (lastError.message || lastError));
-		return message.reply(getLang("failed"));
+		return message.reply(getLang("failed") + "\n" + String((lastError && lastError.message) || lastError).slice(0, 600)
+			+ `\nthread: ${event.threadID}\nreply.senderID: ${replied.senderID}\nbot: ${api.getCurrentUserID && api.getCurrentUserID()}`
+			+ `\nclient methods: ${require("../../func/igcompat/apiCompat.js").apiMethodHints(api).join(",") || "none"}`);
 	}
 };

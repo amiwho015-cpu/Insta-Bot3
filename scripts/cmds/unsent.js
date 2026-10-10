@@ -3,8 +3,7 @@
 /**
  * unsent — no-prefix shortcut. Reply to a bot message with "u", "un", "uns",
  * "r", "unsend" or "unsent" and the bot removes it.
- * v4: no sender-id gate (its format mismatch made it silently do nothing),
- * tries every id the reply carries, and logs why it failed.
+ * v5: on failure, bot admins get the real reason in chat (for debugging).
  */
 const TRIGGERS = ["unsent", "unsend", "u", "uns", "un", "r"];
 
@@ -18,30 +17,34 @@ function replyIds(reply) {
 async function run({ api, event }) {
 	const reply = event.messageReply;
 	if (!reply)
-		return false;
+		return { ok: false, why: "no messageReply on this event" };
 	const ids = replyIds(reply);
 	if (!ids.length)
-		return false;
+		return { ok: false, why: "replied message has no id; keys: " + Object.keys(reply).join(",") };
 
-	let lastError;
+	const problems = [];
 	for (const id of ids) {
 		try {
 			await api.unsendMessage(id, event.threadID);
-			return true;
+			return { ok: true };
 		}
 		catch (err) {
-			lastError = err;
+			problems.push(`id ${id}: ${(err && err.message) || err}`);
 		}
 	}
-	console.log("[unsent] could not unsend", ids.join(","), "-", lastError && (lastError.message || lastError));
-	return false;
+	const why = problems.join("\n").slice(0, 700)
+		+ `\nthread: ${event.threadID}\nreply.senderID: ${reply.senderID}\nbot: ${api.getCurrentUserID && api.getCurrentUserID()}`
+		+ `\nreply keys: ${Object.keys(reply).join(",")}`
+		+ `\nclient methods: ${require("../../func/igcompat/apiCompat.js").apiMethodHints(api).join(",") || "none"}`;
+	console.log("[unsent] failed:", why);
+	return { ok: false, why };
 }
 
 module.exports = {
 	config: {
 		name: "unsent",
 		aliases: ["un", "r", "u"],
-		version: "4.0",
+		version: "5.0",
 		author: "CRX Shihab",
 		countDown: 1,
 		role: 0,
@@ -50,18 +53,20 @@ module.exports = {
 		guide: { en: "Reply to a bot message with u, un, r or {pn}" }
 	},
 
-	onChat: async function ({ api, event }) {
+	onChat: async function ({ api, event, message, role }) {
 		const body = String(event.body || "").trim().toLowerCase();
 		if (!TRIGGERS.includes(body))
 			return;
-		return run({ api, event });
+		const res = await run({ api, event });
+		if (!res.ok && role >= 2)
+			return message.reply("❌ unsend failed:\n" + res.why);
 	},
 
 	onStart: async function ({ api, event, message }) {
 		if (!event.messageReply)
 			return message.reply("Please reply to the message you want to unsend.");
-		const ok = await run({ api, event });
-		if (!ok)
-			return message.reply("Could not unsend that message (only the bot's own messages can be removed).");
+		const res = await run({ api, event });
+		if (!res.ok)
+			return message.reply("❌ unsend failed:\n" + res.why);
 	}
 };

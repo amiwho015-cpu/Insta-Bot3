@@ -92,20 +92,8 @@ module.exports = {
     }
     msg += `💬 Reply with a number (1-${results.length}) to download`;
 
-    const attachments = [];
-    for (const track of results) {
-      if (!track.thumbnail) continue;
-      try {
-        const stream = await global.utils.getStreamFromURL(track.thumbnail);
-        if (stream) attachments.push(stream);
-      } catch {}
-    }
-
-    const sentMsg = await api.sendMessage(
-      attachments.length ? { body: msg, attachment: attachments } : msg,
-      threadID,
-      undefined, messageID
-    );
+    // list only (thumbnails/pictures are turned off)
+    const sentMsg = await api.sendMessage(msg, threadID, undefined, messageID);
 
     api.setMessageReaction("✅", messageID, () => {}, true);
     if (!sentMsg || !sentMsg.messageID) return;
