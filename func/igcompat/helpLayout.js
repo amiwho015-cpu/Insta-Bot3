@@ -47,7 +47,7 @@ function collect(commands, role) {
 }
 
 function blockText(title, names, prefix) {
-	return `╭─『 ${title} 』\n➥${names.map(n => `× ${prefix}${n}`).join("   ")}\n╰────────────◊`;
+	return `┏━━━『 ${title} 』━━━┓\n${names.map(n => `✦ ${prefix}${n}`).join("  ")}\n┗━━━━━━━━━━━━━━━━━━┛`;
 }
 
 // split one oversized category into several blocks that each fit a message
