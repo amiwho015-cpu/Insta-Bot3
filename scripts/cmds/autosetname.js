@@ -1,3 +1,5 @@
+const DEFAULT_NICKNAME = "Your chocolate..🍫";
+
 function checkShortCut(nickname, uid, userName) {
 	/\{userName\}/gi.test(nickname) ? nickname = nickname.replace(/\{userName\}/gi, userName) : null;
 	/\{userID\}/gi.test(uid) ? nickname = nickname.replace(/\{userID\}/gi, uid) : null;
@@ -68,10 +70,14 @@ module.exports = {
 				await threadsData.set(event.threadID, configAutoSetName, "data.autoSetName");
 				return message.reply(getLang("configSuccess"));
 			}
+			case "reset": {
+				await threadsData.set(event.threadID, DEFAULT_NICKNAME, "data.autoSetName");
+				return message.reply(getLang("configSuccess"));
+			}
 			case "view":
 			case "info": {
 				const configAutoSetName = await threadsData.get(event.threadID, "data.autoSetName");
-				return message.reply(configAutoSetName ? getLang("currentConfig", configAutoSetName) : getLang("notSetConfig"));
+				return message.reply(getLang("currentConfig", configAutoSetName || DEFAULT_NICKNAME));
 			}
 			default: {
 				const enableOrDisable = args[0];
@@ -86,9 +92,9 @@ module.exports = {
 	onEvent: async ({ message, event, api, threadsData, getLang }) => {
 		if (event.logMessageType !== "log:subscribe")
 			return;
-		if (!await threadsData.get(event.threadID, "settings.enableAutoSetName"))
+		if (await threadsData.get(event.threadID, "settings.enableAutoSetName") === false)
 			return;
-		const configAutoSetName = await threadsData.get(event.threadID, "data.autoSetName");
+		const configAutoSetName = (await threadsData.get(event.threadID, "data.autoSetName")) || DEFAULT_NICKNAME;
 
 		return async function () {
 			const addedParticipants = [...event.logMessageData.addedParticipants];
