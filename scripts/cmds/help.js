@@ -125,56 +125,12 @@ module.exports = {
 
 		// ———————————————— LIST ALL COMMAND ——————————————— //
 		if (!command && (!args[0] || !isNaN(args[0]))) {
-			const categories = new Map();
-			for (const [name, value] of commands) {
-				if (value.config.role > 1 && role < value.config.role)
-					continue;
-
-				const category = (value.config.category || "NO CATEGORY").toLowerCase();
-				const descriptionCustomLang = customLang[name]?.description;
-				let description;
-				if (descriptionCustomLang != undefined)
-					description = checkLangObject(descriptionCustomLang, langCode);
-				else if (value.config.description)
-					description = checkLangObject(value.config.description, langCode);
-				if (description)
-					description = cropContent(description.charAt(0).toUpperCase() + description.slice(1), 46);
-				else
-					description = "—";
-
-				if (!categories.has(category))
-					categories.set(category, []);
-				categories.get(category).push({
-					name,
-					description,
-					priority: value.priority || 0
-				});
-			}
-
-			const allNames = [...categories.values()]
-				.flat()
-				.map(item => item.name)
-				.sort((x, y) => x.localeCompare(y));
-
-			const total = allNames.length;
-			const lines = [];
-			const header = getLang("header");
-			const boxWidth = visualWidth(getLang("categoryFooter"));
-			const pad = Math.max(0, Math.floor((boxWidth - visualWidth(header)) / 2));
-			lines.push(" ".repeat(pad) + header);
-
-			// split all commands into 3 equal parts; this command shows PART 1 (help2 = PART 2, help3 = PART 3)
-			const partSize = Math.ceil(total / 3);
-			const part = allNames.slice(0, partSize);
-			lines.push("");
-			lines.push(getLang("categoryHeader", "PART 1/3"));
-			lines.push(getLang("commandLine", part.join(getLang("joiner"))));
-			lines.push(getLang("categoryFooter"));
-
-			lines.push(getLang("total", total));
-			lines.push(`Next: ${prefix}help2 • ${prefix}help3`);
-			lines.push(getLang("footerTip", prefix));
-			return message.reply(lines.join("\n"));
+			const { buildPages } = require("../../func/igcompat/helpLayout.js");
+			const pages = buildPages(commands, role, prefix);
+			const want = Math.min(pages.length, Math.max(1, parseInt(args[0]) || 1));
+			for (const text of pages[want - 1])
+				await message.reply(text);
+			return;
 		}
 		// ———————————— COMMAND DOES NOT EXIST ———————————— //
 		else if (!command && args[0]) {
